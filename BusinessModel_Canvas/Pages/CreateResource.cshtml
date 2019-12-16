@@ -1,0 +1,137 @@
+﻿@page
+@model BusinessModel_Canvas.Pages.CreateResourceModel
+@{
+    ViewData["Title"] = "CreateResource";
+    Layout = "~/Pages/Shared/PopupLayout.cshtml";
+}
+
+
+<div id="general-info" class="col" style="height:100%">
+
+
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Name</span>
+        </div>
+        <input id="Name" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" style="height:100%;border:groove;font-size:20px">
+    </div>
+
+    <div class="input-group input-group-lg">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-lg" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Description</span>
+        </div>
+        <textarea id="Description" type="text" class="form-control-plaintext" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" style="height:20vh;border:groove;resize:none;font-size:15px"></textarea>
+    </div>
+
+
+
+    <div class="input-group input-group-prepend" style="margin-top:10px">
+        <span class="input-group-text" id="inputGroup-sizing-lg" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Relation</span>
+        <div style="margin-left:0px;margin-right:0px; font-size: 20px;width: 45%;">
+            <select class="relation-select" style="width: 100%;">
+                <option value="" selected>Works For</option>
+                @foreach (var i in Model.GetAllRelations())
+                {
+                    <option value="@i.Item1">@i.Item2</option>
+                }
+
+            </select>
+
+        </div>
+
+        <button type="button" class="btn btn-secondary btn-lg" style="font-size:20px;" onclick="">Create</button>
+
+    </div>
+
+    <div class="input-group input-group-prepend" style="margin-top:10px">
+        <span class="input-group-text" id="inputGroup-sizing-lg" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Income Flow</span>
+        <div style="margin-left:0px;margin-right:0px; font-size: 20px;width: 45%;">
+            <select class="income-select" style="width: 100%;">
+                <option value="" selected>Add Income</option>
+                @foreach (var i in Model.GetAllIncome())
+                {
+                    <option value="@i.Item1">@i.Item2</option>
+                }
+
+            </select>
+
+        </div>
+
+        <button type="button" class="btn btn-secondary btn-lg" style="font-size:20px;" onclick="">Create</button>
+
+    </div>
+
+    <div class="input-group input-group-prepend" style="margin-top:10px">
+        <span class="input-group-text" id="inputGroup-sizing-lg" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Outcome Flow</span>
+        <div style="margin-left:0px;margin-right:0px; font-size: 20px;width: 45%;">
+            <select class="outcome-select" style="width: 100%;">
+                <option value="" selected>Add Outcome</option>
+                @foreach (var i in Model.GetAllOutcome())
+                {
+                    <option value="@i.Item1">@i.Item2</option>
+                }
+
+            </select>
+
+        </div>
+
+        <button type="button" class="btn btn-secondary btn-lg" style="font-size:20px;" onclick="">Create</button>
+
+    </div>
+
+
+
+
+    <button type="button" class="btn btn-info btn-lg" style="margin-top:10px;font-size:20px;" onclick="CreateActivity();">Submit</button>
+</div>
+
+@section scripts{
+    <script>
+        function CreateActivity() {
+
+            if ($("#Name").val() == "") {
+                alert("İsim alanını doldurmak zorunludur.")
+                return;
+            }
+
+            var data = {
+                Id: '00000000-0000-0000-0000-000000000000',
+                Name: $("#Name").val() == "" ? null:$("#Name").val(),
+                Description: $("#Description").val() == "" ? null:$("#Description").val(),
+                IncomeID: $(".income-select").val() == "" ? null:$(".income-select").val(),
+                OutcomeID: $(".outcome-select").val() == "" ? null:$(".outcome-select").val(),
+                RelationID: $(".relation-select") == "" ? null : $(".relation-select").val(),
+                Type:"Resource"
+            };
+
+            $.post("api/Resource/Create", data, function (data) {
+                window.opener.location.reload(false);
+                window.close();
+            });
+        }
+
+        function AddChild(child) {
+            if ($(child).val() == "" && $(".child-input").length > 1) {
+                $(child.closest(".child-input")).remove();
+                $(".child-title").each(function (i, s) { $(s).html('Child#' + (i + 1) + ' Name') });
+            }
+            var check = false;
+            $(".child").each(function (i, s) { if ($(s).val() == "") check = true });
+            if (!check) {
+                var data =
+                    ' <div class="input-group mb-3 child-input" ><div class="input-group-prepend">' +
+                    '<span class="input-group-text child-title" id="inputGroup-sizing-default" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">' +
+                    '</span>' +
+                    '</div><input oninput="AddChild(this)" id="Name" type="text" class="form-control child" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"' +
+                    'style="height:100%;border:groove;font-size:20px" ></div>';
+
+                $("#child-list").append(data);
+                $(".child-title").each(function (i, s) { $(s).html('Child#' + (i + 1) + ' Name') });
+            }
+        }
+
+
+
+    </script>
+}

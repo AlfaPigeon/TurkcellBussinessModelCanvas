@@ -1,0 +1,496 @@
+﻿@page
+@model BusinessModel_Canvas.Pages.CHANNELSModel
+@{
+    ViewData["Title"] = "CHANNELS";
+}
+
+<!--MODALS-->
+<div class="modal" id="InfoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog" role="document">
+
+        <div id="ModalPartner" class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="InfoModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <ul id="InfoModalTabs" class="nav nav-tabs">
+                <li id="MainTabInfo" class="nav-item">
+                    <a class="nav-link btn-light default-active active" id="home-tab-Info" data-toggle="tab" onclick="" href="#BodyInfo" role="tab" aria-controls="#BodyInfo" aria-selected="false">Info</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn-light" data-toggle="tab" onclick="LoadInOut()" href="#BodyIncomeOutcome" role="tab" aria-controls="#BodyIncomeOutcome" aria-selected="false">Income/Outcome</a>
+                </li>
+
+            </ul>
+            <div class="modal-body tab-content" style="height:79rem;min-height:300px;">
+                <!--Tab content ============================-->
+                <div id="BodyInfo" class="tab-pane tabcontent" role="tabpanel" aria-labelledby="info-tab" style="height:100%">
+                    <div class="edit-bar">
+                        <button class="btn btn-info" onclick="window.open('/EditChannel?' + 'Channel=' + $.cookie('channel-id'), 'Edit Channel', 'toolbar=no,resizable=no,menubar=no')">Edit Channel</button>
+                        <button class="btn btn-danger" onclick="$('.choosen').addClass('ui-selected'); Erease();$('#InfoModal').modal('hide');">Delete</button>
+                    </div>
+                    <div id="general-info" class="col" style="height:100%">
+
+
+
+                        <h5 class="row" id="FirstpartModalTitle">Name:</h5>
+
+                        <p class="row info-text" id="FirstpartModalDesc"> ...</p>
+
+                        <h5 class="row" id="SecondpartModalTitle">Description:</h5>
+
+                        <p class="row scroll-break info-text" id="SecondpartModalDesc" style="height:60vh"> ...</p>
+
+
+
+                    </div>
+
+                </div>
+                <div id="BodyIncomeOutcome" class="tab-pane tabcontent" role="tabpanel" aria-labelledby="employee-tab" style="height:100%">
+                    <div class="row" style="height:100%;width:100%">
+                        <div class="col" style="height:100%;width:100%;">
+                            <div id="BodyIncomeOutcome-outcome" class="tab-pane tabcontent default-active active" role="tabpanel" aria-labelledby="info-tab" style="height:100%">
+                                <div class="col" style="height:100%">
+
+
+                                    <h5 id="FirstpartModalTitle-BodyIncomeOutcome-outcome" class="row">Name:</h5>
+                                    <p class="row info-text" id="FirstpartModalDesc-BodyIncomeOutcome-outcome">
+                                        ...
+                                    </p>
+
+
+                                    <h5 class="row" id="SecondpartModalTitle-BodyIncomeOutcome-outcome">Description:</h5>
+
+                                    <p class="row scroll-break info-text" style="height:40%;max-height:400px;" id="SecondpartModalDesc-BodyIncomeOutcome-outcome">
+                                        ...
+                                    </p>
+
+
+                                    <h5 class="row" id="ThirdpartModalTitle-BodyIncomeOutcome-outcome">Guessed Amount:</h5>
+
+                                    <p class="row info-text" id="ThirdpartModalDesc-BodyIncomeOutcome-outcome">...</p>
+
+
+                                    <h5 class="row" id="FourthpartModalTitle-BodyIncomeOutcome-outcome">Real Amount:</h5>
+
+                                    <p class="row info-text" id="FourthpartModalDesc-BodyIncomeOutcome-outcome">...</p>
+
+
+                                    <div class="row" style="height:10%"></div>
+
+
+
+
+
+
+                                    <div class="row" style="width:100%;margin-top:10%">
+
+                                        <div class="col">
+
+                                            <a class="btn btn-turkcell-outline col outcome-link" aria-label="Left Align" style="height:100%;">
+                                                <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+                                                <p>COST STRUCTURE</p>
+                                            </a>
+
+                                        </div>
+                                    </div>
+
+
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col" style="height:100%;width:100%;border-left:groove">
+                            <div id="BodyIncomeOutcome-income" class="tab-pane tabcontent default-active active" role="tabpanel" aria-labelledby="info-tab" style="height:100%">
+                                <div class="col" style="height:100%">
+
+
+                                    <h5 id="FirstpartModalTitle-BodyIncomeOutcome-income" class="row">Name:</h5>
+                                    <p class="row info-text" id="FirstpartModalDesc-BodyIncomeOutcome-income">
+                                       ...
+                                    </p>
+
+
+                                    <h5 class="row" id="SecondpartModalTitle-BodyIncomeOutcome-income">Description:</h5>
+
+                                    <p class="row scroll-break info-text" style="height:40%;max-height:400px;" id="SecondpartModalDesc-BodyIncomeOutcome-income">
+                                        ...
+                                    </p>
+
+
+                                    <h5 class="row" id="ThirdpartModalTitle-BodyIncomeOutcome-income">Guessed Amount:</h5>
+
+                                    <p class="row info-text" id="ThirdpartModalDesc-BodyIncomeOutcome-income">...</p>
+
+
+                                    <h5 class="row" id="FourthpartModalTitle-BodyIncomeOutcome-income">Real Amount:</h5>
+
+                                    <p class="row info-text" id="FourthpartModalDesc-BodyIncomeOutcome-income">...</p>
+
+
+                                    <div class="row" style="height:10%"></div>
+
+
+
+
+
+
+                                    <div class="row" style="width:100%;margin-top:10%">
+
+                                        <div class="col">
+
+                                            <a class="btn btn-turkcell-outline col income-link" aria-label="Left Align" style="height:100%;">
+                                                <span class="glyphicon glyphicon-usd" aria-hidden="true"></span>
+                                                <p>REVENUE STREAMS</p>
+                                            </a>
+
+                                        </div>
+                                    </div>
+
+
+
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <!--Tab content ============================-->
+            </div>
+
+            <!--Modal Footer-->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <!--  <button type="button" class="btn btn-info">Copy</button>-->
+            </div>
+        </div>
+    </div>
+</div>
+<!--MODALS=================================================================-->
+<div class="row container-fluid" style="min-width: 800px;">
+    <div class="col" style="max-width:100px;">
+        <div class="dropdown">
+            <button id="CreateButton" onclick="" class="row  btn btn-primary" style="height: 7%;width: 90%;margin-left: 10%;font-size:40px;" data-toggle="dropdown" data-placement="right" title="Ekle" aria-haspopup="true" aria-expanded="false">
+                <span class="glyphicon glyphicon-plus"></span>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="CreateButton">
+                <a class="dropdown-item btn-turkcell-outline element" onclick="window.open('/CreateChannel','Create Channel','toolbar=no,resizable=no,menubar=no')"><span class="glyphicon glyphicon-briefcase"></span>Create Channel</a>
+            </div>
+        </div>
+        <button id="SelectButton" onclick="Choose()" class="row  btn btn-secondary" style="height: 7%;width: 90%;margin-left: 10%;font-size:40px;" data-toggle="tooltip" data-placement="right" title="Seç">
+            <span class="glyphicon glyphicon-unchecked"></span>
+        </button>
+        <button id="EraseButton" onclick="Erease()" class="row  btn btn-danger" style="height: 7%;width: 90%;margin-left: 10%;font-size:40px;" data-toggle="tooltip" data-placement="right" title="Sil" disabled>
+            <span class="glyphicon glyphicon-erase"></span>
+        </button>
+    </div>
+
+    <div class="container-fluid col" id="ContentArea" style="width:50%;margin-left:0px;max-width:900px;">
+
+
+
+        <div class="container-fluid row" id="TitlesOfCanvas">
+            <div class="col">
+                <div class="row">
+                    <input oninput="Search(this,'Channel')" id="SearchBar" type="search" class="form-control form-group-lg" placeholder="Search">
+                </div>
+                <div id="Titles" class="row">
+                    <div class="col">Channels</div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="container-fluid row" id="DataTableSection">
+
+
+            <Dataset class="col">
+                @foreach (var channel in Model.GetAllChannels())
+                {
+                    <Channel class="row box element" type="button" onclick="ModalOpen(this,'#InfoModal')" data-id="@channel.Item1" data-relation="Partner" data-name="@channel.Item2">@channel.Item2</Channel>
+
+                }
+            </Dataset>
+
+
+        </div>
+
+
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(function () {
+            var urlParams = new URLSearchParams(window.location.search);
+            var Channel = urlParams.get('Channel');
+            if (Channel != null) {
+                $("Channel[data-id='" + Channel + "']").click();
+            }
+        });
+        function ModalOpen(element, id) {
+            if (element.classList.contains('ui-selectee')) {
+                return;
+            }
+            $(".choosen").removeClass("choosen");
+            $(element).addClass("choosen");
+            $.cookie('channel-id', element.dataset.id);
+            ResetModal();
+            document.getElementById("InfoModalLabel").innerHTML = element.dataset.name;
+            $(id).modal();
+
+            $.get("/api/Channel/Ch/" + $.cookie('channel-id'), function (data) {
+                $("#FirstpartModalDesc").html(data['name']);
+                $("#SecondpartModalDesc").html(data['description']);
+            });
+        }
+
+
+
+        function ResetModal() {
+            /**Resets modal for new information*/
+            $("#FirstpartModalDesc").html("...");
+            $("#SecondpartModalDesc").html("...");
+            //reset active tabs
+
+            $('.active').removeClass('active');
+            $('.default-active').addClass('active');
+
+            $('#BodyInfo').tab('show');
+
+
+        }
+
+        function SetChannelUpdate(id, name) {
+            $("#InfoModal").modal('hide');
+            $("Channel[data-id='" + id + "']").html(name);
+            $("Channel[data-id='" + id + "']").click();
+        }
+        //load data
+
+        function LoadRelations() {
+            ResetRelationData();
+            ResetEmployeeData();
+            $.get("/api/Relation/Resource/" + $.cookie("resource-id"), function (data) {
+
+                $.cookie("relation-id", data['id']);
+                $("#FirstpartModalName-relation").html(data['name']);
+                $("#ThirdpartModalDesc-relation").html(data['description']);
+
+                $.get("/api/Employee/Relation/" + $.cookie("relation-id"), function (data) {
+                    data.forEach(function (element) {
+                        $("#client-list").append(Craft_Employee(element['id'], element['name'], element['position'], element['phone'], element['description'], element['support']));
+                    });
+                });
+
+            });
+
+        }
+
+        function LoadInOut() {
+            ResetInOutData();
+            $.get("/api/Income/Channel/" + $.cookie("channel-id"), function (data) {
+                $.cookie('income-id', data['id']);
+                $("#FirstpartModalDesc-BodyIncomeOutcome-income").html(data['name']);
+                $("#SecondpartModalDesc-BodyIncomeOutcome-income").html(data['description']);
+                $("#ThirdpartModalDesc-BodyIncomeOutcome-income").html(data['guessedAmount']).prepend('₺ ');
+                $("#FourthpartModalDesc-BodyIncomeOutcome-income").html(data['realAmount']).prepend('₺ ');
+
+                $(".income-link").attr('href',"/REVENUESTREAMS?Income=" + data['id']);
+            });
+            $.get("/api/Outcome/Channel/" + $.cookie("channel-id"), function (data) {
+                $.cookie('outcome-id', data['id']);
+                $("#FirstpartModalDesc-BodyIncomeOutcome-outcome").html(data['name']);
+                $("#SecondpartModalDesc-BodyIncomeOutcome-outcome").html(data['description']);
+                $("#ThirdpartModalDesc-BodyIncomeOutcome-outcome").html(data['guessedAmount']).prepend('₺ ');
+                $("#FourthpartModalDesc-BodyIncomeOutcome-outcome").html(data['realAmount']).prepend('₺ ');
+
+                $(".outcome-link").attr('href',"/COSTSTRUCTURE?Outcome=" + data['id']);
+            });
+
+        }
+
+        //show data
+        function ShowChannelData(element) {
+            $.cookie('channel-id', element.dataset.id);
+            $('#FirstpartModalDesc-channel').html(element.dataset.name);
+            $('#SecondpartModalDesc-channel').html(element.dataset.desc);
+        }
+
+
+        function ShowEmployeeData(element) {
+
+            $.cookie('employee-id', element.dataset.id);
+            $("#activity-customerrelation-name-field").html(element.dataset.name);
+            $("#activity-customerrelation-position-field").html(element.dataset.position);
+            $("#activity-customerrelation-number-field").html(element.dataset.phone);
+            $("#activity-customerrelation-expextence-field").html(element.dataset.description);
+            $("#activity-customerrelation-support-field").html(element.dataset.support);
+            $("#activity-customerrelation-support-field").css('width', parseInt(element.dataset.support) * 20 + '%');
+
+
+        }
+        //reset data
+        function ResetChannelData() {
+            $.removeCookie("channel-id");
+            $("#keyactivities-channel-list").html("");
+            $('#FirstpartModalDesc-channel').html("...");
+            $('#SecondpartModalDesc-channel').html("...");
+        }
+        function ResetRelationData() {
+            $.removeCookie("relation-id");
+            $("#FirstpartModalName-relation").html("...");
+            $("#ThirdpartModalDesc-relation").html("...");
+        }
+        function ResetEmployeeData() {
+            $.removeCookie("employee-id");
+            $("#client-list").html("");
+            $("#activity-customerrelation-name-field").html("...");
+            $("#activity-customerrelation-position-field").html("...");
+            $("#activity-customerrelation-number-field").html("...");
+            $("#activity-customerrelation-expextence-field").html("...");
+            $("#activity-customerrelation-support-field").html("");
+            $("#activity-customerrelation-support-field").css('width', '0%');
+        }
+        function ResetInOutData() {
+            $.removeCookie("outcome-id");
+            $.removeCookie("income-id");
+            $("#FirstpartModalDesc-BodyIncomeOutcome-outcome").html("...");
+            $("#SecondpartModalDesc-BodyIncomeOutcome-outcome").html("...");
+            $("#ThirdpartModalDesc-BodyIncomeOutcome-outcome").html("...");
+            $("#FourthpartModalDesc-BodyIncomeOutcome-outcome").html("...");
+            $("#FirstpartModalDesc-BodyIncomeOutcome-income").html("...");
+            $("#SecondpartModalDesc-BodyIncomeOutcome-income").html("...");
+            $("#ThirdpartModalDesc-BodyIncomeOutcome-income").html("...");
+            $("#FourthpartModalDesc-BodyIncomeOutcome-income").html("...");
+            $(".income-link").removeAttr('href');
+            $(".outcome-link").removeAttr('href');
+        }
+        //add to
+        function AddChanneloResource(id) {
+            $.post("/api/Channel/Add/" + $.cookie('resource-id') + "/" + id, function (element) {
+                $("#keyactivities-channel-list").append(Craft_Channel(element['id'], element['name'], element['description']));
+            });
+        }
+
+        function AddEmployeeToRelation(id) {
+            $.post("/api/Employee/Add/ToRelation/" + $.cookie('relation-id') + "/" + id, function (element) {
+                $("#client-list").append(Craft_Employee(element['id'], element['name'], element['position'], element['phone'], element['description'], element['support']));
+            });
+        }
+
+
+        //remove
+
+
+        function RemoveChannelFromResource() {
+            $.ajax({
+                url: 'api/Channel/Remove/' + $.cookie('resource-id') + '/' + $.cookie('channel-id'),
+                type: 'DELETE',
+                success: function (result) {
+                    LoadChannels();
+                }
+            });
+        }
+
+        function RemoveEmployeeFromRelation() {
+            $.ajax({
+                url: 'api/Employee/Remove/FromRelation/' + $.cookie('relation-id') + '/' + $.cookie('employee-id'),
+                type: 'DELETE',
+                success: function (result) {
+                    LoadRelations();
+                }
+            });
+        }
+
+
+
+
+
+        //craft elements
+        function Craft_Channel(id, name, description) {
+            return '<Channel class="list-group-item list-group-item-action element" data-id="'
+                + id + '" data-name="'
+                + name + '" data-desc="'
+                + description + '" data-toggle="list" role="tab" aria-controls="home" onclick="ShowChannelData(this);">' + name + '</Channel>';
+        }
+
+
+        function Craft_Employee(id, name, position, phone, description, support) {
+            return '<client class="list-group-item list-group-item-action element" data-id="' + id + '" data-name="' + name + '" data-position="' + position + '" data-phone="' + phone + '" data-description="' + description + '" data-support="' + support + '"  data-toggle="list" role="tab" onclick="ShowEmployeeData(this);" style="font-size: larger;">' + name + '</client>';
+        }
+
+
+        function Choose() {
+            var select = $("Dataset");
+
+            if ($(".ui-selectee").length > 0) {
+
+                select.selectable("destroy");
+                $("#EraseButton").prop("disabled", true);
+                $("#SelectButton").html('<span class="glyphicon glyphicon-unchecked"></span>');
+                return;
+            }
+
+
+            select.selectable().on("selectableselected", function (event, ui) {
+
+                if ($(".ui-selected").length > 0) {
+                    $("#EraseButton").prop("disabled", false);
+                }
+
+            });
+
+            select.on("selectableunselected", function (event, ui) {
+
+                if ($(".ui-selected").length == 0) {
+                    $("#EraseButton").prop("disabled", true);
+                    select.selectable("destroy");
+                    $("#EraseButton").prop("disabled", true);
+                    $("#SelectButton").html('<span class="glyphicon glyphicon-unchecked"></span>');
+                }
+            });
+
+            $("#SelectButton").html('<span class="glyphicon glyphicon-check"></span>');
+
+
+        }
+
+        function Erease() {
+
+            $(".ui-selected").each(function (i, e) {
+
+                if ($(e).is("Channel")) {
+
+                    $.ajax({
+                        url: 'api/Channel/' + e.dataset.id + '/',
+                        type: 'DELETE',
+                        success: function (result) {
+                            $(e).remove();
+                        }
+                    });
+
+
+                }
+
+            });
+
+
+
+
+        }
+    </script>
+}
+

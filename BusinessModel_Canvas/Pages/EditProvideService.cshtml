@@ -1,0 +1,69 @@
+﻿@page
+@model BusinessModel_Canvas.Pages.EditProvideServiceModel
+@{
+    ViewData["Title"] = "EditProvideService";
+    Layout = "~/Pages/Shared/PopupLayout.cshtml";
+}
+
+
+    <div id="general-info" class="col" style="height:100%">
+
+
+
+        <div class="input-group input-group-prepend" style="margin-top:10px">
+            <span class="input-group-text" id="inputGroup-sizing-lg" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Provider</span>
+            <div style="margin-left: 5px;margin-right:0px; font-size: 20px;width: 45%;">
+                <h3>@Model.GetFirmName()</h3>
+            </div>
+        </div>
+        <div class="input-group input-group-prepend" style="margin-top:10px">
+            <span class="input-group-text" id="inputGroup-sizing-lg" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Service</span>
+            <div style="margin-left: 5px;margin-right:0px; font-size: 20px;width: 45%;">
+                <h3>@Model.GetServiceName()</h3>
+            </div>
+        </div>
+
+        <div id="providing-reason" class="input-group input-group-lg">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-lg" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Partnering Reason</span>
+            </div>
+            <textarea id="Reason" type="text" class="form-control-plaintext" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" style="height:20vh;border:groove;resize:none;font-size:15px">@Model.GetReason()</textarea>
+        </div>
+
+        <div id="start-date" class="input-group input-group-sm">
+            <div class="input-group-prepend">
+                <span class="input-group-text" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Start Date</span>
+            </div>
+            <input id="Start" onload="$(this).datepicker('@Model.GetStartDate()')" type="date" aria-label="Sizing example input" style="border:groove;resize:none;font-size:15px">
+        </div>
+
+        <div id="end-date" class="input-group input-group-sm">
+            <div class="input-group-prepend">
+                <span class="input-group-text" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">End Date</span>
+            </div>
+            <input id="End" onload="$(this).datepicker('@Model.GetEndDate()')" type="date" aria-label="Sizing example input" style="border:groove;resize:none;font-size:15px">
+        </div>
+
+        <button type="button" class="btn btn-info btn-lg" style="margin-top:10px;font-size:20px;" onclick="EditProvider();">Submit</button>
+    </div>
+
+@section scripts{
+    <script>
+        function EditProvider() {
+
+
+            var data = { Id: "@Model.GetRelationID()", Start: $("#Start").val(), End: $("#End").val(), Reason: $("#Reason").val() == "" ? null : $("#Reason").val() };
+
+
+            $.post("api/ProvidesService/Edit/", data, function (nData) {
+                window.opener.SetServiceReason(nData['reason']);
+                window.close();
+            });
+
+
+
+        }
+    </script>
+}
+
+

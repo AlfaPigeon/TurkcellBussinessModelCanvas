@@ -1,0 +1,60 @@
+﻿@page
+@model BusinessModel_Canvas.Pages.EditServiceModel
+@{
+    ViewData["Title"] = "EditService";
+    Layout = "~/Pages/Shared/PopupLayout.cshtml";
+}
+
+<div id="general-info" class="col" style="height:100%">
+
+
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Name</span>
+        </div>
+        <input value="@Model.GetServiceName()" id="Name" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" style="height:100%;border:groove;font-size:20px">
+    </div>
+
+    <div class="input-group input-group-lg">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-lg" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Description</span>
+        </div>
+        <textarea id="Description" type="text" class="form-control-plaintext" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" style="height:20vh;border:groove;resize:none;font-size:15px">@Model.GetServiceDescription()</textarea>
+    </div>
+
+
+
+
+
+
+
+
+    <button type="button" class="btn btn-info btn-lg" style="margin-top:10px;font-size:20px;" onclick="EditService();">Submit</button>
+</div>
+
+@section scripts{
+    <script>
+        function EditService() {
+
+            if ($("#Name").val() == "") {
+                alert("İsim alanını doldurmak zorunludur.")
+                return;
+            }
+
+            var data = {
+                Id: '@Model.GetServiceID()',
+                Name: $("#Name").val(),
+                Description: $("#Description").val()
+            };
+
+            $.post("api/Service/Edit", data, function (data) {
+                window.opener.SetNameAndDescription(data['name'], data['description']);
+                window.close();
+            });
+        }
+
+
+    </script>
+}
+

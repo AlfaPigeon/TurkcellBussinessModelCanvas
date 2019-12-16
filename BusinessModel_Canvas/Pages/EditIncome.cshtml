@@ -1,0 +1,84 @@
+﻿@page
+@model BusinessModel_Canvas.Pages.EditIncomeModel
+@{
+    ViewData["Title"] = "EditIncome";
+    Layout = "~/Pages/Shared/PopupLayout.cshtml";
+}
+
+<div id="general-info" class="col" style="height:100%">
+
+
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Name</span>
+        </div>
+        <input value="@Model.GetName()" id="Name" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" style="height:100%;border:groove;font-size:20px">
+    </div>
+
+    <div class="input-group input-group-lg">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-lg" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Description</span>
+        </div>
+        <textarea id="Description" type="text" class="form-control-plaintext" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" style="height:20vh;border:groove;resize:none;font-size:15px">@Model.GetDescription()</textarea>
+    </div>
+
+
+
+    <div class="input-group">
+
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-lg" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Guessed Amount</span>
+        </div>
+        <input value="@Model.GetGuessed()" id="Guessed" type="text" oninput="Decimal(this)" class="form-control" aria-label="Amount (to the nearest turkish lira)" style="border:groove;resize:none;font-size:20px">
+        <div class="input-group-append">
+            <span class="input-group-text" style="font-size: 20px;">₺</span>
+            <span class="input-group-text" style="font-size: 20px;">0,00</span>
+        </div>
+    </div>
+
+    <div class="input-group">
+
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-lg" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Real Amount</span>
+        </div>
+        <input value="@Model.GetReal()" id="Real" type="text" oninput="Decimal(this)" class="form-control" aria-label="Amount (to the nearest turkish lira)" style="border:groove;resize:none;font-size:20px">
+        <div class="input-group-append">
+            <span class="input-group-text" style="font-size: 20px;">₺</span>
+            <span class="input-group-text" style="font-size: 20px;">0,00</span>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-info btn-lg" style="margin-top:10px;font-size:20px;" onclick="CreateIncome();">Submit</button>
+</div>
+
+@section scripts{
+    <script>
+        function CreateIncome() {
+
+            if ($("#Name").val() == "") {
+                alert("İsim alanını doldurmak zorunludur.")
+                return;
+            }
+
+            var data = {
+                Id: '@Model.GetIncome()',
+                Name: $("#Name").val(),
+                Description: $("#Description").val(),
+                GuessedAmount: $("#Guessed").val(),
+                RealAmount: $("#Real").val()
+            };
+
+            $.post("api/Income/Edit", data, function (data) {
+                window.opener.SetIncomeUpdate(data['id'], data['name']);
+                window.close();
+            });
+        }
+
+        function Decimal(num) {
+            var output = $(num).val().replace(/[^\d,]/g, '')
+            $(num).val(output);
+        }
+    </script>
+}
+

@@ -1,0 +1,206 @@
+﻿@page
+@model BusinessModel_Canvas.Pages.EditEmployeeModel
+@{
+    ViewData["Title"] = "EditEmployee";
+    Layout = "~/Pages/Shared/PopupLayout.cshtml";
+}
+
+<div id="general-info" class="col" style="height:100%">
+
+
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Name</span>
+        </div>
+        <input value="@Model.GetName()" id="Name" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" style="height:100%;border:groove;font-size:20px">
+    </div>
+
+ 
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Position</span>
+        </div>
+        <input value="@Model.GetPosition()" id="Position" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" style="height:100%;border:groove;font-size:20px">
+    </div>
+
+
+
+    <div class="input-group input-group-lg">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-lg" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Expectance Description</span>
+        </div>
+        <textarea id="Description" type="text" class="form-control-plaintext" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" style="height:20vh;border:groove;resize:none;font-size:15px">@Model.GetDescription()</textarea>
+    </div>
+
+
+    <div class="input-group input-group-lg">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-lg" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Interests</span>
+        </div>
+        <textarea id="Interests" type="text" class="form-control-plaintext" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" style="height:20vh;border:groove;resize:none;font-size:15px">@Model.GetInterests()</textarea>
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">School Graduated</span>
+        </div>
+        <input value="@Model.GetInterests()" id="School" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" style="height:100%;border:groove;font-size:20px">
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Birth Date</span>
+        </div>
+        @{  string year = "", mounth = "", day = "";
+            if(Model.GetBirthDate() != null)
+            {
+                var raw = Model.GetBirthDate().ToString().Split('.');
+                year = raw[2].Split(' ')[0];
+                mounth = raw[1];
+                day = raw[0];
+                if (day.Length < 2) day = '0' + day;
+                if (mounth.Length < 2) mounth = '0' + mounth;
+            }
+
+
+            }
+        <input value="@year-@mounth-@day" id="BirthDate" type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" style="height:100%;border:groove;font-size:20px">
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Birth Place</span>
+        </div>
+        <input value="@Model.GetBirthPlace()" id="BirthPlace" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" style="height:100%;border:groove;font-size:20px">
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Married?/Partner Name</span>
+            <div class="input-group-text">
+                @{ var check = Model.GetIsMarried() ? "checked" : ""; var disable = Model.GetIsMarried() ? "" : "disabled";}
+                <input @check id="IsMarried" onclick="$('#Significant').prop('disabled', !$(this).is(':checked'))" type="checkbox" aria-label="Checkbox for following text input">
+            </div>
+        </div>
+        <input value="@Model.GetSignificant()" id="Significant" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" style="height:100%;border:groove;font-size:20px" @disable>
+    </div>
+
+    <div id="child-list">
+
+        @for (int i = 0;Model.GetChildren() != null && i < Model.GetChildren().Length; i++)
+        {
+            <div class="input-group mb-3 child-input">
+                <div class="input-group-prepend">
+                    <span class="input-group-text child-title" id="inputGroup-sizing-default" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Child#@(i+1) Name</span>
+                </div>
+                <input value="@Model.GetChildren()[i]" oninput="AddChild(this)" id="Name" type="text" class="form-control child" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" style="height:100%;border:groove;font-size:20px">
+            </div>
+        }
+        <div class="input-group mb-3 child-input">
+            <div class="input-group-prepend">
+                <span class="input-group-text child-title" id="inputGroup-sizing-default" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Child#@(Model.GetChildren() != null?Model.GetChildren().Length+1:1) Name</span>
+            </div>
+            <input oninput="AddChild(this)" id="Name" type="text" class="form-control child" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" style="height:100%;border:groove;font-size:20px">
+        </div>
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Support Level</span>
+        </div>
+        <input value="@Model.GetSupport()" id="Support-number" oninput="$('#Support-range').val($(this).val())" type="number" class="custom-range" min="0" max="5" style="font-size: 20px;height: auto;width: 6%;text-align: right;">
+        <input value="@Model.GetSupport()" id="Support-range" oninput="$('#Support-number').val($(this).val())" type="range" class="custom-range" min="0" max="5" style="height:auto">
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Office Phone</span>
+        </div>
+        <input value="@Model.GetOfficePhone()" id="OfficePhone" type="text" maxlength="11" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" style="height:100%;border:groove;font-size:20px">
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Cell Phone</span>
+        </div>
+        <input value="@Model.GetCellPhone()" id="CellPhone" type="text" maxlength="11" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" style="height:100%;border:groove;font-size:20px">
+    </div>
+    <div class="input-group input-group-lg">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-lg" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Office Address</span>
+        </div>
+        <textarea id="OfficeAddress" type="text" class="form-control-plaintext" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" style="height:20vh;border:groove;resize:none;font-size:15px">@Model.GetOfficeAddress()</textarea>
+    </div>
+    <div class="input-group input-group-lg">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-lg" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Home Address</span>
+        </div>
+        <textarea id="HomeAddress" type="text" class="form-control-plaintext" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" style="height:20vh;border:groove;resize:none;font-size:15px">@Model.GetHomeAddress()</textarea>
+    </div>
+
+
+    <button type="button" class="btn btn-info btn-lg" style="margin-top:10px;font-size:20px;" onclick="EditEmployee();">Submit</button>
+</div>
+
+@section scripts{
+    <script>
+        function EditEmployee() {
+
+            if ($("#Name").val() == "") {
+                alert("İsim alanını doldurmak zorunludur.")
+                return;
+            }
+
+            var children = [];
+            $(".child").each(function (i, e) { if ($(e).val() != "") children.push($(e).val()); });
+            var data = {
+                Id: '@Model.GetEmployeeID()',
+                Name: $("#Name").val(),
+                Description: $("#Description").val() == "" ? null : $("#Description").val(),
+                Position: $("#Position").val() == "" ? null : $("#Position").val(),
+                School: $("#School").val() == "" ? null : $("#School").val(),
+                Significant: $("#Significant") == "" ? null : $("#Significant").val(),
+                BirthPlace: $("#BirthPlace").val() == "" ? null : $("#BirthPlace").val(),
+                BirthDate: ($("#BirthDate").val().length == 0) ? null : $("#BirthDate").val(),
+                IsMarried: $("#IsMarried").is(':checked') ? true : false,
+                Children: children,
+                Interests: $("#Interests").val() == "" ? null : $("#Interests").val(),
+                Support: $("#Support-range").val(),
+                CellPhone: $("#CellPhone").val() == "" ? null : $("#CellPhone").val(),
+                OfficePhone: $("#OfficePhone").val() == "" ? null : $("#OfficePhone").val(),
+                OfficeAddress: $("#OfficeAddress").val() == "" ? null : $("#OfficeAddress").val(),
+                HomeAddress: $("#HomeAddress").val() == "" ? null : $("#HomeAddress").val()
+            };
+
+            $.post("api/Employee/Edit", data, function (element) {
+
+                window.opener.SetEmployeeUpdate('@Model.GetEmployeeID()',$("#Name").val())
+                window.close();
+            });
+        }
+
+        function AddChild(child) {
+            if ($(child).val() == "" && $(".child-input").length > 1) {
+                $(child.closest(".child-input")).remove();
+                $(".child-title").each(function (i, s) { $(s).html('Child#' + (i + 1) + ' Name') });
+            }
+            var check = false;
+            $(".child").each(function (i, s) { if ($(s).val() == "") check = true });
+            if (!check) {
+                var data =
+                    ' <div class="input-group mb-3 child-input" ><div class="input-group-prepend">' +
+                    '<span class="input-group-text child-title" id="inputGroup-sizing-default" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">' +
+                    '</span>' +
+                    '</div><input oninput="AddChild(this)" id="Name" type="text" class="form-control child" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"' +
+                    'style="height:100%;border:groove;font-size:20px" ></div>';
+
+                $("#child-list").append(data);
+                $(".child-title").each(function (i, s) { $(s).html('Child#' + (i + 1) + ' Name') });
+            }
+        }
+
+
+
+    </script>
+}

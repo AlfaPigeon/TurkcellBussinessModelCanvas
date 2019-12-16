@@ -1,0 +1,129 @@
+﻿@page
+@model BusinessModel_Canvas.Pages.LoginModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/bootstrap-4.3.1-dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/bootstrap-4.3.1-dist/css/bootstrap-grid.css" />
+    <link rel="stylesheet" href="~/bootstrap-4.3.1-dist/css/bootstrap-reboot.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+
+</head>
+<body style="background-image: url('https://localhost:44342/images/aagg.png')">
+
+    <div class="center" style="height:500px;width:500px;background-color:white;border:double 5px;">
+        <div class="bd-example bd-example-tabs">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link" id="home-tab" data-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">Register</a>
+                </li>
+
+            </ul>
+            <div class="tab-content" id="myTabContent">
+
+                <div class="tab-pane active" id="login" role="tabpanel" aria-labelledby="home-tab">
+
+                    <button onclick="Login()"></button>
+
+
+
+                </div>
+                <div class="tab-pane" id="register" role="tabpanel" aria-labelledby="profile-tab">
+                    <h2 style="margin-left:10px">Register With Google and Invite Token:</h2>
+                    <button class="center btn-light" style="width:200px;height:200px;background-image: url('https://localhost:44342/images/image10.png')"></button>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Token</span>
+                        </div>
+                        <input value="" id="Name" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" style="height:100%;border:groove;font-size:20px">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script src="~/js/vendor/jquery.js"></script>
+    <script src="~/js/carhartl-jquery-cookie-92b7715/jquery.cookie.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.js" integrity="sha256-7BfFV/dSvQT4pGBvRAIt6JDXsehb92DQqpGUndLCPQ4=" crossorigin="anonymous"></script>
+    <script src="~/bootstrap-4.3.1-dist/js/bootstrap.js"></script>
+    <script src="~/js//jquery-ui-1.12.1.custom/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+
+
+
+
+    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.5.2/firebase-app.js"></script>
+
+    <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+    <script src="https://www.gstatic.com/firebasejs/7.5.2/firebase-analytics.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/7.5.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.5.2/firebase-firestore.js"></script>
+
+
+    <!-- Previously loaded Firebase SDKs -->
+
+
+
+    <script>
+        $(function () {
+            // TODO: Replace the following with your app's Firebase project configuration
+            const firebaseConfig = {
+                apiKey: "AIzaSyCdOmlSJNZsAiAKIRUCwGkFDBhD5UU04j8",
+                authDomain: "turkcellcanvasmodel.firebaseapp.com",
+                databaseURL: "https://turkcellcanvasmodel.firebaseio.com",
+                projectId: "turkcellcanvasmodel",
+                storageBucket: "turkcellcanvasmodel.appspot.com",
+                messagingSenderId: "711959468431",
+                appId: "1:711959468431:web:9d54f3ef7f2fa28aea13fa",
+                measurementId: "G-H4E6BDQ54J"
+            };
+
+
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+        });
+
+
+        function Login() {
+            var provider = new firebase.auth.GoogleAuthProvider();
+
+            firebase.auth().signInWithPopup(provider).then(function (result) {
+                // This gives you a Google Access Token. You can use it to access the Google API.
+                var token = result.credential.accessToken;
+                // The signed-in user info.
+                var user = result.user;
+                // ...
+
+                alert(user['displayName']);
+            }).catch(function (error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // The email of the user's account used.
+                var email = error.email;
+                // The firebase.auth.AuthCredential type that was used.
+                var credential = error.credential;
+                // ...
+             
+            });
+
+        }
+    </script>
+</body>
+</html>

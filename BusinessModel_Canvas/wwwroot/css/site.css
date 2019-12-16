@@ -1,71 +1,541 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification 
 for details on configuring this project to bundle and minify static web assets. */
 
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
 }
 
-/* Provide sufficient contrast against white background */
-a {
-  color: #0366d6;
+/* Carousel */
+.carousel-caption p {
+    font-size: 20px;
+    line-height: 1.4;
 }
 
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+/* Make .svg files in the carousel display properly in older browsers */
+/*.carousel-inner .item img[src$=".svg"] {
+    width: 100%;
+}
+*/
+/* QR code generator */
+#qrCode {
+    margin: 15px;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+/* Hide/rearrange for smaller screens */
+@media screen and (max-width: 767px) {
+    /* Hide captions */
+    .carousel-caption {
+        display: none;
+    }
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  font-size: 14px;
-}
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+
+input {
+    max-width: 280px;
 }
 
-.border-top {
-  border-top: 1px solid #e5e5e5;
-}
-.border-bottom {
-  border-bottom: 1px solid #e5e5e5;
+.entry {
+    min-width: 250px;
+    display: inline-block;
 }
 
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+.details, .edit, .delete {
+    cursor: pointer;
+    color: #337ab7;
+    text-decoration: underline;
 }
 
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
+ul {
+    padding-left: 0;
+    list-style-type: none;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  position: relative;
-  min-height: 100%;
+#content {
+    min-height: 500px;
 }
 
+.button {
+    display: block;
+    background-color: #bbb;
+    margin: 10px;
+    padding: 10px
+}
+
+
+
+/*=======================================*/
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    background-color: white;
+    /* background-color: #f5ffff;*/
+    /*
+        #FBE8A6
+        #F4976C
+        #303C6C
+        #B4DFE5
+        #D2FDFF
+                    */
 }
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+
+#ShowInfo {
+    resize: none;
+    margin-left: 5%;
+    width: 95%;
+    height: 95%;
+    overflow-y: scroll;
+    background-color: azure;
+}
+
+#InfoTitle {
+    font: bold 30px timesnewroman;
+    margin-left: 5%;
+    color: white;
+}
+
+#ShowInfo {
+    font-size: 15px;
+}
+
+
+
+button.btn.btn-outline-primary.border2.border22 {
+    background-color: white;
+    font: 600 16px arial;
+}
+
+    button.btn.btn-outline-primary.border2.border22:hover {
+        background-color: #008CBA;
+    }
+
+.center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#SubMenu {
+    font: 500 14px arial;
+    color: black;
+}
+
+#Table {
+    background-color: white;
+}
+
+#ToggleButton {
+    background-color: #2855ac;
+    border: dashed;
+}
+
+
+
+
+.glyphicon glyphicon-th-large {
+    float: right;
+    background-color: #337ab7;
+    color: #337ab7;
+}
+
+
+    .glyphicon glyphicon-th-large:hover {
+        background-color: #e5e000;
+        position: relative;
+        height: 5vw;
+        width: 5vw;
+        color: #e5e000;
+    }
+
+#TitlesOfCanvas {
+    width: 100%;
+    margin-right: 0px;
+    margin-left: 0px;
+    height: 80px;
+    background-color: #2855ac;
+    /* float: left;*/
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+#ContentArea {
+    width: 40%;
+    min-width: 600px;
+    height: 100%;
+    margin-left: 5%;
+    border: solid 1px black;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+.SideMenu {
+    width: 4%;
+    min-width: 100px;
+    max-width:150px;
+    height: 100%;
+    min-height:500px;
+    margin-left: 1%;
+    padding-right: 0px;
+    padding-left: 0px;
+    margin-right:1px;
+    margin-left:5px;
+}
+
+#DataTableSection {
+    height: 700px;
+    max-height: 700px;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-right: 0px;
+    padding-left: 0px;
+    background-color: #e2e2e2
+    /* overflow-y: scroll;*/
+}
+
+#SearchBar {
+    width: 100%;
+}
+
+Dataset {
+    overflow-y: scroll;
+    height: 100%;
+    max-height: 680px;
+    padding-right: 0px;
+    margin-left: 15px;
+    margin-top: 5px;
+}
+
+
+
+#Titles {
+    padding-top: 1.2vh;
+    text-align: center;
+    font: 600 20px verden;
+    color: white;
+}
+
+Element {
+    /* width: 200px;*/
+    height: 40px;
+    margin-top: 1px;
+    width: 100%;
+    background-color: white;
+    /* border: solid;
+    border: solid thin #808080;*/
+    padding: 5px;
+    overflow-wrap: break-word;
+    overflow-y:hidden;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 1vw;
+    user-select: none;
+}
+
+    Element:hover {
+        box-shadow: #2f2f2f 1px 1px inset;
+        background-color: #eeeeee;
+        cursor: pointer;
+    }
+
+.element {
+    /* width: 200px;*/
+    min-height: 40px;
+    margin-top: 1px;
+    width: 100%;
+    background-color: white;
+    /* border: solid;
+    border: solid thin #808080;*/
+    padding: 5px;
+    overflow-wrap: break-word;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 16px;
+    user-select: none;
+    overflow-y:hidden;
+    display: block;
+}
+
+    .element:hover {
+        box-shadow: #2f2f2f 1px 1px inset;
+        background-color: #eeeeee;
+        cursor: pointer;
+    }
+
+
+#InfoModal {
+    height: 100%;
+    width: 100%;
+    overflow-y: visible;
+    overflow-x: scroll;
+}
+
+#ModalPartner {
+    width: 75vw;
+    height: 100%;
+    min-width: 700px;
+}
+
+.default-modal-content {
+    width: 75vw;
+    height: 100%;
+    min-width: 700px;
+}
+
+.flat-list-height_125px {
+    overflow-y: scroll;
+    height: 125px;
+    border: 1px solid #ced4da;
+    display:block;
+}
+
+#service-select {
+    max-height: 200px;
+    overflow-y: scroll;
+}
+
+#ServiceInfoArea {
+    border: 1px solid #ced4da;
+    margin-top: 5px;
+    height: 78%;
+}
+
+#BodyServices {
+    height: 100%;
+}
+
+#ServiceInfoTabs {
+    border-bottom: 1px solid #ced4da;
+}
+
+BodyServices-info {
+    height: 100%;
+}
+
+
+#main-navbar {
+    margin-bottom: 0px;
+    width: 100%;
+    border-bottom-width: 0px;
+    background-color: #2855ac;
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
+#MainMenu {
+    width: 430px;
+}
+
+#MainArea {
+    background-color: #2855ac;
+    width: 100%;
+}
+
+#ToggleButton {
+    background-color: #2855ac;
+}
+
+#main-title {
+    font-size: 2rem;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    line-height: 1.5;
+    display: block;
+    padding: .4375rem 1rem;
+    letter-spacing: .8px;
+}
+
+#subtitle {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding: .75rem 1rem;
+    margin-bottom: 1rem;
+    list-style: none;
+    background-color: #2b64a0;
+    border-radius: .25rem;
+    color: white;
+    font-size: 2rem;
+    text-decoration: none;
+    font-weight: 500;
+    line-height: 1.5;
+    display: block;
+    padding: .4375rem 1rem;
+    letter-spacing: .8px;
+}
+
+hr {
+    margin-bottom: 0px;
+}
+
+footer {
+    background-color: #2b64a0;
+    color: white;
+    box-shadow: 0 50vh 0 50vh #2855ac;
+}
+
+#select-navbar {
+    margin-bottom: 0px;
+    width: 100%;
+    border-bottom-width: 0px;
+    background-color: #2855ac;
+}
+
+#main-menu-top {
+    margin-bottom: 0px;
+    height: 30px;
+    width: 100%;
+    border-bottom-width: 0px;
+    background-color: #2855ac;
+}
+
+#main-menu-bottom {
+    margin-bottom: 0px;
+    width: 100%;
+    border-bottom-width: 0px;
+    background-color: #2855ac;
+}
+
+#SelectMenu {
+    max-width: 90%;
+    margin-top: 0px;
+}
+
+.btn-turkcell {
+    color: #fff;
+    background-color: #2b64a0;
+    border-color: #2b64a0;
+}
+
+    .btn-turkcell:hover {
+        background-color: #1a5390;
+        border-color: #2b64a0;
+        color: #fff;
+    }
+
+.btn-turkcell-outline {
+    color: black;
+    border-color: #007bff;
+    background-color: white;
+    font: 600 16px arial;
+    border: dashed;
+}
+
+    .btn-turkcell-outline:hover {
+        color: white;
+        background-color: #008CBA;
+    }
+
+.modal-header {
+    background-color: #2855ac;
+    color: white;
+}
+
+.m-header-nav a {
+    font-size: 1rem;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    line-height: 1.5;
+    display: block;
+    padding: .4375rem 1rem;
+    letter-spacing: .8px;
+}
+
+.edit-bar {
+    border: dashed 2px #2b64a0;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#ResourceSearchBar {
+}
+
+BodyServices-resources {
+    height: 100%;
+}
+
+#resource-list {
+    overflow-y: scroll;
+    height: 80%;
+    border: 1px solid #ced4da;
+}
+
+#BodyServices-resources {
+    height: 100%;
+    width: 100%;
+    margin: 15px;
+}
+
+#content-services {
+    height: 100%;
+}
+
+.modal-dialog {
+    margin-left: 20%;
+    margin-right: 0px;
+}
+
+#client-list {
+    overflow-y: scroll;
+    height: 90%;
+    border: 1px solid #ced4da;
+    max-height: 700px;
+    display: block;
+}
+#client-list-relation {
+    overflow-y: scroll;
+    height: 90%;
+    border: 1px solid #ced4da;
+    max-height: 700px;
+    display: block;
+}
+.info-keyactivity {
+    height: 100%;
+}
+
+#BodyShippingChannel {
+    height: 100%;
+}
+
+.slot {
+    padding-bottom: 5px;
+    background-color: #ced4da;
+}
+
+.no-margin {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.scroll-break {
+    overflow-y: scroll;
+    overflow-wrap: break-word;
+    flex-wrap: unset;
+    display: block;
+}
+
+.modal-body {
+    height: 79rem;
+    min-height: 300px;
+}
+.info-text{
+    font-size:1.20rem;
+}
+
+.element.ui-selected {
+    background-color: coral;
+    color:white;
+}
+.element.ui-selecting {
+    background-color: #6fa7e1;
+    color: white;
+}
+
+.info-text {
+    font-size: 14px;
 }

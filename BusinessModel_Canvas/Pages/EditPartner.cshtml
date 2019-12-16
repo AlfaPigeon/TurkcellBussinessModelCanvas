@@ -1,0 +1,52 @@
+﻿@page
+@model BusinessModel_Canvas.Pages.EditPartnerModel
+@{
+    ViewData["Title"] = "EditPartner";
+    Layout = "~/Pages/Shared/PopupLayout.cshtml";
+}
+
+
+
+<div id="general-info" class="col" style="height:100%">
+
+
+
+    <div class="input-group input-group-prepend" style="margin-top:10px">
+        <span class="input-group-text" id="inputGroup-sizing-lg" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Firm</span>
+        <div style="margin-left: 5px;margin-right:0px; font-size: 20px;width: 45%;">
+            <h3>@Model.GetFirmName()</h3>
+        </div>
+    </div>
+    <div id="partnering-reason" class="input-group input-group-lg">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-lg" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Partnering Reason</span>
+        </div>
+        <textarea id="Reason" type="text" class="form-control-plaintext" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" style="height:20vh;border:groove;resize:none;font-size:15px">@Model.GetPartnerReason()</textarea>
+    </div>
+
+
+
+    <button type="button" class="btn btn-info btn-lg" style="margin-top:10px;font-size:20px;" onclick="EditPartner();">Submit</button>
+</div>
+
+@section scripts{
+    <script>
+        function EditPartner() {
+
+
+            var data = { Id: "@Model.GetFirmID()", Name: null, Order: null, Description: null, RelationshipDescription: null, Reason: $("#Reason").val() == "" ? null : $("#Reason").val() };
+
+
+            $.post("api/Partners/Edit/", data, function (nData) {
+                window.opener.SetReason(nData['reason']);
+                window.close();
+            });
+
+
+
+        }
+    </script>
+}
+
+
+

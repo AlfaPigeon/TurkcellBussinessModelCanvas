@@ -1,0 +1,688 @@
+﻿@page
+@model BusinessModel_Canvas.Pages.CUSTOMERSEGMENTModel
+@{
+    ViewData["Title"] = "CUSTOMERSEGMENT";
+}
+
+<!--MODALS-->
+<div class="modal" id="InfoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog" role="document">
+
+        <div id="ModalPartner" class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="InfoModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <ul id="InfoModalTabs" class="nav nav-tabs">
+                <li id="MainTabInfo" class="nav-item">
+                    <a class="nav-link btn-light active" id="home-tab-Info" data-toggle="tab" onclick="" href="#BodyInfo" role="tab" aria-controls="#BodyInfo" aria-selected="false">Info</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn-light" data-toggle="tab" onclick="LoadServices()" href="#BodyServices" role="tab" aria-controls="#BodyServices" aria-selected="false">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn-light" data-toggle="tab" onclick="LoadEmployees()" href="#BodyEmployees" role="tab" aria-controls="#BodyEmployees" aria-selected="false">Employees</a>
+                </li>
+            </ul>
+            <div class="modal-body tab-content">
+
+                <div id="BodyInfo" class="tab-pane tabcontent" role="tabpanel" aria-labelledby="info-tab" style="height:100%">
+                    <div class="edit-bar">
+                        <button class="btn btn-danger" onclick="$('.choosen').addClass('ui-selected'); Erease();$('#InfoModal').modal('hide');">Remove All Services From Client</button>
+                    </div>
+                    <div id="general-info" class="col" style="height:100%">
+
+
+                        <h5 id="FirstpartModalTitle" class="row">Name:</h5>
+
+                        <p id="FirstpartModalDesc" class="row info-text"> ...</p>
+
+
+                        <h5 id="SecondpartModalTitle" class="row">Description:</h5>
+
+                        <p id="SecondpartModalDesc" class="row scroll-break info-text" style="height: 35%;max-height: 300px;"> ...</p>
+
+
+
+                        <h5 id="ThirdpartModalTitle" class="row">Relationship Description:</h5>
+
+                        <p id="ThirdpartModalDesc" class="row scroll-break info-text" style="height: 30%;max-height: 300px;"> ...</p>
+
+
+                        <h5 id="FourthpartModalTitle" class="row">Order:</h5>
+
+                        <p id="FourthpartModalDesc" class="row info-text">...</p>
+
+
+                        <h5 id="FifthpartModalTitle" class="row hide">Partnering Reason:</h5>
+
+                        <p id="FifthpartModalDesc" class="row scroll-break hide info-text" style="height: 15%;max-height: 200px;">...</p>
+
+                    </div>
+
+                </div>
+
+                <div id="BodyServices" class="tab-pane tabcontent" role="tabpanel" aria-labelledby="service-tab">
+                    <div class="col" style="height:100%;">
+                        <div class="row">
+                            <div class="col" style="padding-left: 0px;">
+                                <input oninput="Search(this,'service')" id="ServiceSearchBar" type="search" class="form-control ds-input mb-3" placeholder="Search" style="width:100%">
+                                <div id="keypartners-services-list" class="list-group  flat-list-height_125px" role="tablist">
+
+
+                                </div>
+                            </div>
+                            <div class="col" style="padding-right: 0px;">
+
+                                <div class="input-group mb-3 row" style="margin-left:0px;margin-right:0px;">
+                                    <select class="custom-select" id="service-select">
+                                        <option selected>Add Service</option>
+                                        @foreach (var i in Model.GetAllServices())
+                                        {
+                                            <option value="@i.Item1">@i.Item2</option>
+                                        }
+                                    </select>
+                                </div>
+                                <textarea id="service-reason" placeholder="Reason" style="margin-left:0px;margin-right:0px;margin-top: 2px;margin-bottom: 0px;height: 50%;width: 100%;resize: none;" class="row"></textarea>
+                                <div class="row" style="margin-top: 2px;width: 100%;margin-left:0px;margin-right:0px;">
+                                    <h6 class="col-3" style="padding-left: 0px;">Start Date</h6>
+                                    <h6 class="col-3" style="padding-left: 0px;">End Date</h6>
+                                </div>
+                                <div class="row" style="width: 100%;margin-left:0px;margin-right:0px;">
+                                    <input id="services-add-start-date" type="date" class="col-3" />
+                                    <input id="services-add-end-date" type="date" class="col-3" />
+                                    <button type="button" class="btn btn-success col-3" onclick="AddServiceToClient($('#service-select').val(),$('#services-add-start-date').val(),$('#services-add-end-date').val(),$('#service-reason').val())">Add</button>
+
+                                    <button type="button" class="btn btn-secondary col-3">Create</button>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div id="ServiceInfoArea" class="row">
+                            <div class="col">
+                                <div id="ServiceInfoTabs" class="row">
+                                    <ul class="nav nav-tabs">
+                                        <li id="sevice-tab-info" class="nav-item">
+                                            <a class="nav-link btn-light active" id="link-service-info" data-toggle="tab" onclick="" href="#BodyServices-info" role="tab" aria-controls="#BodyInfo" aria-selected="false">Info</a>
+                                        </li>
+                                        <li id="sevice-tab-resources" class="nav-item">
+                                            <a class="nav-link btn-light" id="link-service-resources" data-toggle="tab" onclick="" href="#BodyServices-resources" role="tab" aria-controls="#BodyServices" aria-selected="false">Resources</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div id="content-services" class="row tab-content">
+                                    <div id="BodyServices-info" class="tab-pane tabcontent col active" role="tabpanel">
+                                        <div class="edit-bar">
+                                            <button class="btn btn-info" onclick="if ($('service').hasClass('active')) window.open('/EditProvideService?' + 'Firm=' + $.cookie('firm-id') + '&Service=' + $.cookie('service-id')+'&IsClient=true', 'Edit Partner', 'toolbar=no,resizable=no,menubar=no')">Edit</button>
+                                            <button class="btn btn-danger" onclick="RemoveServiceFromFirm()">Remove</button>
+                                        </div>
+
+                                        <div style="height:100%; margin-left:15px;margin-right:15px;">
+
+                                            <h5 id="BodyServices-info-name-title" class="row">Name:</h5>
+                                            <p id="BodyServices-info-name-text" class="row info-text">...</p>
+
+                                            <h5 id="BodyServices-info-desc-title" class="row">Service Description:</h5>
+                                            <p id="BodyServices-info-desc-text" class="row scroll-break info-text" style="height:30%;max-height:200px;">...</p>
+
+                                            <h5 id="BodyServices-info-reason-title" class="row">Providing Reason:</h5>
+                                            <p id="BodyServices-info-reason-text" class="row scroll-break info-text" style="height:30%;max-height:200px;">...</p>
+
+                                        </div>
+                                    </div>
+                                    <div id="BodyServices-resources" class="tab-pane tabcontent" role="tabpanel" style="height:100%;width:100%">
+                                        <div class="row" style="height:100%;width:100%">
+
+                                            <div class="col" style="height:100%;width:100%">
+                                                <div class="row" style="height:100%;width:100%">
+                                                    <div class="col">
+                                                        <input oninput="Search(this,'resource')" id="ResourceSearchBar" type="search" class="form-control ds-input mb-3" placeholder="Search" style="width:100%">
+                                                        <div class="list-group" id="resource-list" role="tablist">
+
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col" style="padding-right: 0px;">
+
+                                                        <div class="input-group mb-3">
+                                                            <select class="custom-select" id="service-resource-select">
+                                                                <option selected>Add Resource</option>
+
+                                                                @foreach (var resource in Model.GetAllResources())
+                                                                {
+                                                                    <option value="@resource.Item1">@resource.Item2</option>
+                                                                }
+                                                            </select>
+                                                        </div>
+                                                        <textarea id="service-resource-add-desc" class="row" placeholder="Description" style="margin-top: 0px;margin-bottom: 0px;resize: none;height: 30%;margin-left: 0px;width: 100%;margin-right: 0px;"></textarea>
+                                                        <div class="row" style="margin-left: 0px;width: 100%;margin-right: 0px;">
+                                                            <button type="button" class="btn btn-success col" onclick="AddResourceToService($('#service-resource-select').val(),$('#service-resource-add-desc').val())">Add</button>
+
+                                                            <button type="button" class="btn btn-secondary col">Create</button>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col" style="height:90%;width:100%;border-left:groove">
+                                                <div id="ResourceInfo" class="tab-pane tabcontent active" role="tabpanel" aria-labelledby="info-tab" style="height:100%">
+                                                    <div class="edit-bar">
+                                                        <button class="btn btn-info" onclick="if ($('service').hasClass('active') && $('resource').hasClass('active')) window.open('/EditProvideResource?' + 'Service=' + $.cookie('service-id') + '&Resource=' + $.cookie('resource-id'), 'Edit Provide Description', 'toolbar=no,resizable=no,menubar=no')">Edit</button>
+                                                        <button class="btn btn-danger" onclick="RemoveResourceFromService()">Remove</button>
+                                                    </div>
+                                                    <div class="col" style="height:100%">
+
+
+                                                        <h5 id="FirstpartModalTitle-Resource" class="row">Resource Name:</h5>
+
+                                                        <p id="FirstpartModalDesc-Resource" class="row info-text"> ...</p>
+
+
+
+                                                        <h5 id="SecondpartModalTitle-Resource" class="row">Resource Description:</h5>
+
+                                                        <p id="SecondpartModalDesc-Resource" class="row scroll-break info-text" style="height:20%;max-height:200px;"> ...</p>
+
+
+
+
+                                                        <h5 id="FourthpartModalTitle-Resource" class="row">Service Provide Description:</h5>
+
+                                                        <p id="FourthpartModalDesc-Resource" class="row scroll-break info-text" style="height:20%;max-height:200px;"> ...</p>
+
+
+
+
+                                                        <h5 id="ThirdpartModalTitle-Resource" class="row">Type:</h5>
+
+                                                        <p id="ThirdpartModalDesc-Resource" class="row info-text">...</p>
+
+
+
+                                                        <a class="btn btn-turkcell-outline resource-link" aria-label="Left Align" style="width:100%;height:15%">
+                                                            <span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span>
+                                                            <p>KEY RESOURCES</p>
+                                                        </a>
+
+
+
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="BodyEmployees" class="tab-pane tabcontent" role="tabpanel" aria-labelledby="employee-tab" style="height:100%">
+                    <div class="row" style="height:100%;width:100%">
+
+                        <div class="col" style="height:100%;width:100%">
+                            <div class="row" style="height:100%;width:100%">
+                                <div class="col">
+                                    <input oninput="Search(this,'client')" id="ClientSearchBar" type="search" class="form-control ds-input mb-3" placeholder="Search" style="width:100%">
+                                    <div class="list-group" id="client-list" role="tablist">
+
+
+                                    </div>
+                                </div>
+                                <div class="col" style="padding-right: 0px;">
+
+                                    <div class="input-group mb-3">
+                                        <select class="custom-select" id="client-select">
+                                            <option selected>Add Employee</option>
+
+                                            @foreach (var employee in Model.GetAllEmployees())
+                                            {
+                                                <option value="@employee.Item1">@employee.Item2</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <button type="button" class="btn btn-success" onclick="AddEmployeeToFirm($('#client-select').val())">Add</button>
+
+                                    <button type="button" class="btn btn-secondary">Create</button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col" style="height:100%;width:100%;border-left:groove">
+                            <div id="ClientInfo" class="tab-pane tabcontent active" role="tabpanel" aria-labelledby="info-tab" style="height:100%">
+                                <div class="edit-bar">
+                                    <button class="btn btn-danger" onclick="RemoveEmployeeFromFirm()">Remove Employee From List</button>
+                                </div>
+                                <div class="col" style="height:100%">
+
+                                    <h5 id="activity-customerrelation-name" class="row">Name:</h5>
+
+                                    <p id="activity-customerrelation-name-field" style="margin-top:0px;" class="row info-text"> ...</p>
+
+
+                                    <h5 id="activity-customerrelation-position" class="row">Position:</h5>
+
+                                    <p id="activity-customerrelation-position-field" style="margin-top:0px;overflow-wrap:break-word;" class="row info-text">...</p>
+
+
+                                    <h5 id="activity-customerrelation-number" class="row">Number:</h5>
+
+                                    <p id="activity-customerrelation-number-field" style="margin-top:0px;overflow-wrap:break-word;" class="row info-text">...</p>
+
+
+                                    <h5 id="activity-customerrelation-expextence" class="row">Expectence Description:</h5>
+
+                                    <p id="activity-customerrelation-expextence-field" style="margin-top:0px;height:40%;max-height:300px;" class="row scroll-break info-text"> ...</p>
+
+
+
+                                    <h5 id="activity-customerrelation-support" class="row">Support Level:</h5>
+
+                                    <div class="progress">
+                                        <div id="activity-customerrelation-support-field" class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+
+
+
+                                    <a class="btn btn-turkcell-outline human-link" aria-label="Left Align" style="width:100%;margin-top: 10vh;">
+                                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                                        <p>Human Relation</p>
+                                    </a>
+
+
+
+
+
+
+
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <!--  <button type="button" class="btn btn-info">Copy</button>-->
+            </div>
+        </div>
+    </div>
+</div>
+<!--MODALS=================================================================-->
+<div class="row container-fluid" style="min-width: 800px;">
+    <div class="col" style="max-width:100px;">
+        <div class="dropdown">
+            <button id="CreateButton" onclick="" class="row  btn btn-primary" style="height: 7%;width: 90%;margin-left: 10%;font-size:40px;" data-toggle="dropdown" data-placement="right" title="Ekle" aria-haspopup="true" aria-expanded="false">
+                <span class="glyphicon glyphicon-plus"></span>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="CreateButton">
+                <a class="dropdown-item btn-turkcell-outline element" onclick="window.open('/GiveService','Give Service','toolbar=no,resizable=no,menubar=no')"><span class="glyphicon glyphicon-briefcase"></span>Give Service</a>
+            </div>
+        </div>
+        <button id="SelectButton" onclick="Choose()" class="row  btn btn-secondary" style="height: 7%;width: 90%;margin-left: 10%;font-size:40px;" data-toggle="tooltip" data-placement="right" title="Seç">
+            <span class="glyphicon glyphicon-unchecked"></span>
+        </button>
+        <button id="EraseButton" onclick="Erease()" class="row  btn btn-danger" style="height: 7%;width: 90%;margin-left: 10%;font-size:40px;" data-toggle="tooltip" data-placement="right" title="Sil" disabled>
+            <span class="glyphicon glyphicon-erase"></span>
+        </button>
+    </div>
+
+    <div class="container-fluid col" id="ContentArea" style="width:50%;margin-left:0px;max-width:900px;">
+
+
+
+        <div class="container-fluid row" id="TitlesOfCanvas">
+            <div class="col">
+                <div class="row">
+                    <input oninput="Search(this,'Providee')" id="SearchBar" type="search" class="form-control form-group-lg" placeholder="Search">
+                </div>
+                <div id="Titles" class="row">
+                    <div class="col">Customers</div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="container-fluid row" id="DataTableSection">
+
+
+            <Dataset class="col">
+                @foreach (var client in Model.GetClients())
+                {
+                    <Providee class="row box element" type="button" onclick="ModalOpen(this,'#InfoModal')" data-id="@client.FirmID" data-relation="" data-name="@client.FirmName">@client.FirmName</Providee>
+                }
+            </Dataset>
+
+
+        </div>
+
+
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        
+        $(function () {
+            var urlParams = new URLSearchParams(window.location.search);
+            var Providee = urlParams.get('Providee');
+            if (Providee != null) {
+                $("Providee[data-id='" + Providee + "']").click();
+            }
+        });
+        //modal open
+        function ModalOpen(element, id) {
+            if (element.classList.contains('ui-selectee')) {
+                return;
+            }
+            $(".choosen").removeClass("choosen");
+            $(element).addClass("choosen");
+
+            $.cookie("firm-id", element.dataset.id);
+            ResetModal();
+            document.getElementById("InfoModalLabel").innerHTML = element.dataset.name;
+
+            $.get("/api/Firms/" + element.dataset.id, function (data) {
+                $("#FirstpartModalDesc").html(data['name']);
+                $("#SecondpartModalDesc").html(data['description']);
+                $("#ThirdpartModalDesc").html(data['relationshipDescription']);
+                $("#FourthpartModalDesc").html(data['order']);
+                $("#InfoModal").attr("data-id", element.dataset.id);
+            });
+
+
+
+
+            $(id).modal();
+        }
+
+
+
+        function ResetModal() {
+            /**Resets modal for new information*/
+            $("#FirstpartModalDesc").html("...");
+            $("#SecondpartModalDesc").html("...");
+            $("#ThirdpartModalDesc").html("...");
+            $("#FourthpartModalDesc").html("...");
+            $("#FifthpartModalDesc").html("...");
+            $("#resource-list").html("");
+            //reset active tabs
+            $('.active').removeClass('active');
+            $('#home-tab-Info').addClass('active');
+            $('#BodyServices-info').addClass('active');
+            $('#link-service-info').addClass('active');
+            $('#BodyInfo').tab('show');
+
+            //remove additional elements
+            $("#FifthpartModalTitle").addClass('hide');
+            $("#FifthpartModalDesc").addClass('hide');
+
+            //reset css
+            $("#ThirdpartModalDesc").css('height', '30%');
+
+        }
+        function SetServiceReason(reason) {
+            $("#BodyServices-info-reason-text").html(reason);
+        }
+        function SetResourceDescription() {
+            LoadResources();
+        }
+        //load data
+        function LoadServices() {
+            ResetServiceData();
+            $.get("/api/ProvidesService/OurProvidedServices/" + $.cookie("firm-id"), function (data) {
+                var check = false;
+                data.forEach(function (element) {
+                    $("#keypartners-services-list").append(Craft_Service(element['id'], element['name'], element['description'], element['reason']));
+                    check = true;
+                });
+                if (check) {
+                    $("Providee[data-id='" + $.cookie('firm-id') + "']").remove('hide');
+                } else {
+                    $("Providee[data-id='" + $.cookie('firm-id') + "']").addClass('hide');
+                }
+            });
+
+
+        }
+
+        function LoadResources() {
+            var ResorceID = $.cookie("resource-id");
+            ResetResourceData();
+            $.get("/api/ProvidesResource/Resources/" + $.cookie("service-id"), function (data) {
+                data.forEach(function (element) {
+                    $("#resource-list").append(Craft_Resource(element['id'], element['name'], element['description'], element['provideDescription'], element['type']));
+                });
+                var resource = $('resource[data-id="' + ResorceID + '"]');
+                resource.click();
+            });
+        }
+
+        function LoadEmployees() {
+            ResetEmployeeData();
+            $.get("/api/Employee/Firm/" + $.cookie("firm-id"), function (data) {
+                data.forEach(function (element) {
+                    $("#client-list").append(Craft_Employee(element['id'], element['name'], element['position'], element['phone'], element['description'], element['support']));
+                });
+            });
+
+
+        }
+        //show data
+        function ShowServiceData(element) {
+            $.cookie('service-id', element.dataset.id);
+            $('#BodyServices-info-name-text').html(element.dataset.name);
+            $('#BodyServices-info-desc-text').html(element.dataset.desc);
+            $('#BodyServices-info-reason-text').html(element.dataset.reason);
+        }
+
+        function ShowResourceData(element) {
+
+            $.cookie('resource-id', element.dataset.id);
+            $("#FirstpartModalDesc-Resource").html(element.dataset.name);
+            $("#SecondpartModalDesc-Resource").html(element.dataset.desc);
+            $("#ThirdpartModalDesc-Resource").html(element.dataset.type);
+            $("#FourthpartModalDesc-Resource").html(element.dataset.pdesc);
+
+            $(".resource-link").attr('href',(element.dataset.type == "event")?"/KEYACTIVITIES?Activity=":"/KEYRESOURCES?Resource=" + element.dataset.id);
+        }
+
+        function ShowEmployeeData(element) {
+
+            $.cookie('employee-id', element.dataset.id);
+            $("#activity-customerrelation-name-field").html(element.dataset.name);
+            $("#activity-customerrelation-position-field").html(element.dataset.position);
+            $("#activity-customerrelation-number-field").html(element.dataset.phone);
+            $("#activity-customerrelation-expextence-field").html(element.dataset.description);
+            $("#activity-customerrelation-support-field").html(element.dataset.support);
+            $("#activity-customerrelation-support-field").css('width', parseInt(element.dataset.support) * 20 + '%');
+
+            $(".human-link").attr('href',"/COSTUMERRELATIONSHIPS?Employee=" + element.dataset.id);
+        }
+        //reset data
+        function ResetServiceData() {
+            $.removeCookie("service-id");
+            $("#keypartners-services-list").html("");
+            $('#BodyServices-info-name-text').html("...");
+            $('#BodyServices-info-desc-text').html("...");
+            $('#BodyServices-info-reason-text').html("...");
+            $("#resource-list").html("");
+        }
+        function ResetResourceData() {
+            $.removeCookie("resource-id");
+            $("#resource-list").html("");
+            $("#FirstpartModalDesc-Resource").html("...");
+            $("#SecondpartModalDesc-Resource").html("...");
+            $("#ThirdpartModalDesc-Resource").html("...");
+            $("#FourthpartModalDesc-Resource").html("...");
+
+            $(".resource-link").removeAttr('href');
+        }
+        function ResetEmployeeData() {
+            $.removeCookie("employee-id");
+            $("#client-list").html("");
+            $("#activity-customerrelation-name-field").html("...");
+            $("#activity-customerrelation-position-field").html("...");
+            $("#activity-customerrelation-number-field").html("...");
+            $("#activity-customerrelation-expextence-field").html("...");
+            $("#activity-customerrelation-support-field").html("");
+            $("#activity-customerrelation-support-field").css('width', '0%');
+
+            $(".human-link").removeAttr('href');
+        }
+
+        //add to
+        function AddServiceToClient(id, start, end, reason) {
+            var data = { Id: id, Start: start, End: end, Reason: reason };
+            $.post("/api/ProvidesService/AddToClient/", data, function (element) {
+                $("#keypartners-services-list").append(Craft_Service(element['id'], element['name'], element['description'], element['reason']));
+                $("Providee[data-id='" + $.cookie('firm-id') + "']").removeClass('hide');
+            });
+        }
+
+        function AddEmployeeToFirm(id) {
+            $.post("/api/Employee/Add/ToFirm/" + $.cookie('firm-id') + "/" + id, function (element) {
+                $("#client-list").append(Craft_Employee(element['id'], element['name'], element['position'], element['phone'], element['description'], element['support']));
+            });
+        }
+
+        function AddResourceToService(id, desc) {
+            $.post("/api/ProvidesResource/Add/" + $.cookie("service-id") + "/" + id + "/" + desc, function (element) {
+                $("#resource-list").append(Craft_Resource(element['id'], element['name'], element['description'], element['provideDescription'], element['type']));
+            });
+        }
+        //remove
+
+
+        function RemoveServiceFromFirm() {
+            $.ajax({
+                url: 'api/ProvidesService/RemoveFromClient/' + $.cookie('firm-id') + '/' + $.cookie('service-id'),
+                type: 'DELETE',
+                success: function (result) {
+                    LoadServices();
+                }
+            });
+
+        }
+        function RemoveResourceFromService() {
+            $.ajax({
+                url: 'api/ProvidesResource/Remove/' + $.cookie('service-id') + '/' + $.cookie('resource-id'),
+                type: 'DELETE',
+                success: function (result) {
+                    LoadResources();
+                }
+            });
+        }
+        function RemoveEmployeeFromFirm() {
+            $.ajax({
+                url: 'api/Employee/Remove/' + $.cookie('firm-id') + '/' + $.cookie('employee-id'),
+                type: 'DELETE',
+                success: function (result) {
+                    LoadEmployees();
+                }
+            });
+        }
+
+
+
+
+        //craft elements
+        function Craft_Service(id, name, description, reason) {
+            return '<service class="list-group-item list-group-item-action element" data-id="'
+                + id + '" data-name="'
+                + name + '" data-desc="'
+                + description + '" data-reason="'
+                + reason
+                + '" data-toggle="list" role="tab" aria-controls="home" onclick="ShowServiceData(this);LoadResources()">' + name + '</service>';
+        }
+        function Craft_Resource(id, name, description, provideDescription, type) {
+            return '<resource class="list-group-item list-group-item-action element" data-id="'
+                + id + '" data-name="'
+                + name + '" data-desc="'
+                + description + '" data-pdesc="'
+                + provideDescription + '" data-type="'
+                + type + '" data-toggle="list" role="tab" aria-controls="home" onclick="ShowResourceData(this)">' + name + '</resource>';
+        }
+
+        function Craft_Employee(id, name, position, phone, description, support) {
+            return '<client class="list-group-item list-group-item-action element" data-id="' + id + '" data-name="' + name + '" data-position="' + position + '" data-phone="' + phone + '" data-description="' + description + '" data-support="' + support + '"  data-toggle="list" role="tab" onclick="ShowEmployeeData(this);" style="font-size: larger;">' + name + '</client>';
+        }
+
+        //util
+
+        function Choose() {
+            var select = $("Dataset");
+
+            if ($(".ui-selectee").length > 0) {
+
+                select.selectable("destroy");
+                $("#EraseButton").prop("disabled", true);
+                $("#SelectButton").html('<span class="glyphicon glyphicon-unchecked"></span>');
+                return;
+            }
+
+
+            select.selectable().on("selectableselected", function (event, ui) {
+
+                if ($(".ui-selected").length > 0) {
+                    $("#EraseButton").prop("disabled", false);
+                }
+
+            });
+
+            select.on("selectableunselected", function (event, ui) {
+
+                if ($(".ui-selected").length == 0) {
+                    $("#EraseButton").prop("disabled", true);
+                    select.selectable("destroy");
+                    $("#EraseButton").prop("disabled", true);
+                    $("#SelectButton").html('<span class="glyphicon glyphicon-unchecked"></span>');
+                }
+            });
+
+            $("#SelectButton").html('<span class="glyphicon glyphicon-check"></span>');
+
+
+        }
+
+        function Erease() {
+
+            $(".ui-selected").each(function (i, e) {
+
+                if ($(e).is("Providee")) {
+
+                    $.ajax({
+                        url: 'api/Service/RemoveFrom/' + e.dataset.id + '/',
+                        type: 'DELETE',
+                        success: function (result) {
+                            $(e).remove();
+                        }
+                    });
+
+
+                }
+
+
+            });
+
+
+
+
+        }
+    </script>
+}
+
+

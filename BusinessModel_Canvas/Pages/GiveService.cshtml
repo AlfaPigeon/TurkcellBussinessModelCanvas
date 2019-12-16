@@ -1,0 +1,85 @@
+﻿@page
+@model BusinessModel_Canvas.Pages.GiveServiceModel
+@{
+    ViewData["Title"] = "GiveService";
+    Layout = "~/Pages/Shared/PopupLayout.cshtml";
+}
+
+<div id="general-info" class="col" style="height:100%">
+
+
+
+    <div class="input-group input-group-prepend" style="margin-top:10px">
+        <span class="input-group-text" id="inputGroup-sizing-lg" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Provider</span>
+        <div style="margin-left:0px;margin-right:0px; font-size: 20px;width: 45%;">
+            <select class="firm-select" style="width: 100%;">
+                <option value="null" selected>Works For</option>
+                @foreach (var firm in Model.GetAllFirms())
+                {
+                    <option value="@firm.Item1">@firm.Item2</option>
+                }
+            </select>
+
+        </div>
+
+        <button type="button" class="btn btn-secondary btn-lg" style="font-size:20px;" onclick="">Create</button>
+
+    </div>
+    <div class="input-group input-group-prepend" style="margin-top:10px">
+        <span class="input-group-text" id="inputGroup-sizing-lg" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Service</span>
+        <div style="margin-left:0px;margin-right:0px; font-size: 20px;width: 45%;">
+            <select class="service-select" style="width: 100%;">
+                <option value="null" selected>Add Service To Provider</option>
+                @foreach (var service in Model.GetAllServices())
+                {
+                    <option value="@service.Item1">@service.Item2</option>
+                }
+            </select>
+
+        </div>
+
+        <button type="button" class="btn btn-secondary btn-lg" style="font-size:20px;" onclick="">Create</button>
+
+    </div>
+
+
+
+    <div id="providing-reason" class="input-group input-group-lg">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-lg" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Providing Reason</span>
+        </div>
+        <textarea id="Reason" type="text" class="form-control-plaintext" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" style="height:20vh;border:groove;resize:none;font-size:15px"></textarea>
+    </div>
+
+    <div id="providing-date" class="input-group input-group-prepend">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-lg" style="background-color: #2b64a0;color: white;font-size: 20px;width: 230px;">Starting/Ending Dates</span>
+        </div>
+        <input id="StartDate" type="date" class="ui-datepicker-multi" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" style="border:groove;resize:none;font-size:15px">
+        <input id="EndDate" type="date" class="ui-datepicker-multi" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" style="border:groove;resize:none;font-size:15px">
+
+    </div>
+
+    <button type="button" class="btn btn-info btn-lg" style="margin-top:10px;font-size:20px;" onclick="AddService();">Submit</button>
+</div>
+
+@section scripts{
+    <script>
+        function AddService() {
+            if ($(".firm-select").val() == "null") {
+                alert("Firma alanını doldurmak zorunludur.");
+                return;
+            }
+            if ($(".service-select").val() == "null") {
+                alert("Servis alanını doldurmak zorunludur.");
+                return;
+            }
+            var data = { Id: $(".service-select").val(), Start: $("#StartDate").val(), End: $("#EndDate").val(), Reason: $("#Reason").val() };
+            $.post("/api/ProvidesService/AddToClient/"+$(".firm-select").val(), data, function (element) {
+                window.opener.location.reload(false);
+                window.close();
+            });
+        }
+    </script>
+}
+

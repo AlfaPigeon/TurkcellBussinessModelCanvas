@@ -1,0 +1,561 @@
+﻿@page
+@model BusinessModel_Canvas.Pages.VALUEPROPOSITIONModel
+@{
+    ViewData["Title"] = "VALUEPROPOSITION";
+}
+
+<!--MODALS-->
+<div class="modal" id="InfoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog" role="document">
+
+        <div id="ModalPartner" class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="InfoModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <ul id="InfoModalTabs" class="nav nav-tabs">
+                <li id="MainTabInfo" class="nav-item">
+                    <a class="nav-link btn-light active" id="home-tab-Info" data-toggle="tab" onclick="" href="#BodyInfo" role="tab" aria-controls="#BodyInfo" aria-selected="false">Info</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn-light" data-toggle="tab" onclick="LoadResources()" href="#BodyServices" role="tab" aria-controls="#BodyServices" aria-selected="false">Resources</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn-light" data-toggle="tab" onclick="LoadEmployees()" href="#BodyEmployees" role="tab" aria-controls="#BodyEmployees" aria-selected="false">Employees</a>
+                </li>
+            </ul>
+            <div class="modal-body tab-content">
+
+                <div id="BodyInfo" class="tab-pane tabcontent" role="tabpanel" aria-labelledby="info-tab" style="height:100%">
+                    <div class="edit-bar">
+                        <button class="btn btn-info" onclick="window.open('/EditService?' + 'Service=' + $.cookie('service-id'), 'Edit Service', 'toolbar=no,resizable=no,menubar=no')">Edit Service</button>
+                        <button class="btn btn-danger" onclick="$('.choosen').addClass('ui-selected'); Erease();$('#InfoModal').modal('hide');">Delete Service</button>
+                    </div>
+                    <div id="general-info" class="col" style="height:100%">
+
+
+                        <h5 id="FirstpartModalTitle" class="row">Name:</h5>
+
+                        <p id="FirstpartModalDesc" class="row info-text"> ...</p>
+
+
+                        <h5 id="SecondpartModalTitle" class="row">Service Description:</h5>
+
+                        <p id="SecondpartModalDesc" class="row scroll-break info-text" style="height: 80%;max-height: 700px;"> ...</p>
+
+
+
+
+
+
+                    </div>
+
+                </div>
+
+                <div id="BodyServices" class="tab-pane tabcontent" role="tabpanel" aria-labelledby="service-tab">
+                    <div class="row" style="height:100%;width:100%">
+
+                        <div class="col" style="height:100%;width:100%">
+                            <div class="row" style="height:100%;width:100%">
+                                <div class="col">
+                                    <input oninput="Search(this, 'resource');" id="ResourceSearchBar" type="search" class="form-control ds-input mb-3" placeholder="Search" style="width:100%; ">
+                                    <div class="list-group" id="resource-list" role="tablist" style="height: 90%;">
+
+
+                                    </div>
+                                </div>
+                                <div class="col" style="padding-right: 0px;">
+
+                                    <div class="input-group mb-3">
+                                        <select class="custom-select" id="resource-select">
+                                            <option selected>Choose...</option>
+
+                                            @foreach (var resource in Model.GetAllResources())
+                                            {
+                                                <option value="@resource.Item1">@resource.Item2</option>
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <textarea id="service-resource-add-desc" class="row" placeholder="Description" style="margin-top: 0px;margin-bottom: 0px;resize: none;height: 30%;margin-left: 0px;width: 100%;margin-right: 0px;"></textarea>
+                                    <div class="row" style="margin-left:0px;margin-right:0px;">
+                                        <button type="button" class="btn btn-success col" onclick="AddResourceToService($('#resource-select').val(),$('#service-resource-add-desc').val())">Add</button>
+
+                                        <button type="button" class="btn btn-secondary col">Create</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col" style="height:100%;width:100%;border-left:groove">
+                            <div id="ResourceInfo" class="tab-pane tabcontent active" role="tabpanel" aria-labelledby="info-tab" style="height:100%">
+                                <div class="edit-bar">
+                                    <button class="btn btn-info" onclick="if ($('resource').hasClass('active')) window.open('/EditProvideResource?' + 'Service=' + $.cookie('service-id') + '&Resource=' + $.cookie('resource-id'), 'Edit Provide Description', 'toolbar=no,resizable=no,menubar=no')">Edit Provide Description</button>
+                                    <button class="btn btn-danger" onclick="RemoveResourceFromService()">Remove Resource From Service</button>
+                                </div>
+                                <div class="col" style="height:100%">
+
+
+                                    <h5 id="FirstpartModalTitle-Resource" class="row">Resource Name:</h5>
+
+                                    <p id="FirstpartModalDesc-Resource" class="row info-text"> ...</p>
+
+
+
+                                    <h5 id="SecondpartModalTitle-Resource" class="row">Resource Description:</h5>
+
+                                    <p id="SecondpartModalDesc-Resource" class="row scroll-break info-text" style="height:20%;max-height:200px;"> ...</p>
+
+
+
+
+                                    <h5 id="FourthpartModalTitle-Resource" class="row">Service Provide Description:</h5>
+
+                                    <p id="FourthpartModalDesc-Resource" class="row scroll-break info-text" style="height:20%;max-height:200px;"> ...</p>
+
+
+
+
+                                    <h5 id="ThirdpartModalTitle-Resource" class="row">Type:</h5>
+
+                                    <p id="ThirdpartModalDesc-Resource" class="row info-text">...</p>
+
+
+
+                                    <a class="btn btn-turkcell-outline resource-link" aria-label="Left Align" style="width:100%;height:10%;margin-top: 20%;">
+                                        <span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span>
+                                        <p>KEY RESOURCES</p>
+                                    </a>
+
+
+
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div id="BodyEmployees" class="tab-pane tabcontent" role="tabpanel" aria-labelledby="employee-tab" style="height:100%">
+                    <div class="row" style="height:100%;width:100%">
+
+
+                        <div class="col" style="height:100%;width:100%">
+                            <input oninput="Search(this, 'client');" id="ClientSearchBar" type="search" class="form-control ds-input mb-3" placeholder="Search" style="width:100%">
+                            <div class="list-group" id="client-list" role="tablist">
+
+                            </div>
+                        </div>
+
+                        <div class="col" style="height:100%;width:100%;border-left:groove">
+                            <div id="ClientInfo" class="tab-pane tabcontent active" role="tabpanel" aria-labelledby="info-tab" style="height:100%">
+                                <div class="col" style="height:100%">
+
+                                    <h5 id="activity-customerrelation-name" class="row">Name:</h5>
+
+                                    <p id="activity-customerrelation-name-field" style="margin-top:0px;" class="row info-text"> ...</p>
+
+
+                                    <h5 id="activity-customerrelation-position" class="row">Position:</h5>
+
+                                    <p id="activity-customerrelation-position-field" style="margin-top:0px;overflow-wrap:break-word;" class="row info-text">...</p>
+
+
+                                    <h5 id="activity-customerrelation-number" class="row">Number:</h5>
+
+                                    <p id="activity-customerrelation-number-field" style="margin-top:0px;overflow-wrap:break-word;" class="row info-text">...</p>
+
+
+                                    <h5 id="activity-customerrelation-expextence" class="row">Expectence Description:</h5>
+
+                                    <p id="activity-customerrelation-expextence-field" style="margin-top:0px;height:40%;max-height:300px;" class="row scroll-break info-text"> ...</p>
+
+
+
+                                    <h5 id="activity-customerrelation-support" class="row">Support Level:</h5>
+
+
+                                    <div class="progress">
+                                        <div id="activity-customerrelation-support-field" class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">25%</div>
+                                    </div>
+
+
+                                    <a class="btn btn-turkcell-outline human-link" aria-label="Left Align" style="width:100%">
+                                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                                        <p>Human Relation</p>
+                                    </a>
+
+
+
+
+
+
+
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <!--  <button type="button" class="btn btn-info">Copy</button>-->
+            </div>
+        </div>
+    </div>
+</div>
+<!--MODALS=================================================================-->
+<div class="row container-fluid" style="min-width: 800px;">
+    <div class="col" style="max-width:100px;">
+        <div class="dropdown">
+            <button id="CreateButton" onclick="" class="row  btn btn-primary" style="height: 7%;width: 90%;margin-left: 10%;font-size:40px;" data-toggle="dropdown" data-placement="right" title="Ekle" aria-haspopup="true" aria-expanded="false">
+                <span class="glyphicon glyphicon-plus"></span>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="CreateButton">
+                <a class="dropdown-item btn-turkcell-outline element" onclick="window.open('/CreateService','Create Service','toolbar=no,resizable=no,menubar=no')"><span class="glyphicon glyphicon-briefcase"></span>Create Service</a>
+            </div>
+        </div>
+        <button id="SelectButton" onclick="Choose()" class="row  btn btn-secondary" style="height: 7%;width: 90%;margin-left: 10%;font-size:40px;" data-toggle="tooltip" data-placement="right" title="Seç">
+            <span class="glyphicon glyphicon-unchecked"></span>
+        </button>
+        <button id="EraseButton" onclick="Erease()" class="row  btn btn-danger" style="height: 7%;width: 90%;margin-left: 10%;font-size:40px;" data-toggle="tooltip" data-placement="right" title="Sil" disabled>
+            <span class="glyphicon glyphicon-erase"></span>
+        </button>
+    </div>
+
+    <div class="container-fluid col" id="ContentArea" style="width:70%;margin-left:0px;max-width:1600px;">
+
+
+
+        <div class="container-fluid row" id="TitlesOfCanvas">
+            <div class="col">
+                <div class="row">
+                    <input oninput="Search(this, 'Service');Search(this, 'Providing');Search(this, 'Provided');" id="SearchBar" type="search" class="form-control form-group-lg" placeholder="Search">
+                </div>
+                <div id="Titles" class="row">
+                    <div class="col">All Services</div>
+                    <div class="col">Our Providing</div>
+                    <div class="col">Provided Services</div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="container-fluid row" id="DataTableSection">
+            <Dataset class="col">
+                @foreach (var service in Model.GetAllServices())
+                {
+                    <Service class="row box element" type="button" onclick="ModalOpen(this,'#InfoModal')" data-id="@service.Id" data-name="@service.Name">@service.Name</Service>
+                }
+            </Dataset>
+
+            <Dataset class="col">
+                @foreach (var service in Model.GetOurProvidingServices())
+                {
+                    <Providing class="row box element" type="button" onclick="ModalOpen(this,'#InfoModal')" data-id="@service.Id" data-name="@service.Name">@service.Name</Providing>
+                }
+            </Dataset>
+            <Dataset class="col">
+                @foreach (var service in Model.GetTheirProvidingServices())
+                {
+                    <Provided class="row box element" type="button" onclick="ModalOpen(this,'#InfoModal')" data-id="@service.Id" data-name="@service.Name">@service.Name</Provided>
+                }
+
+            </Dataset>
+        </div>
+
+
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            var urlParams = new URLSearchParams(window.location.search);
+            var Service = urlParams.get('Service');
+            var Providing = urlParams.get('Providing');
+            var Provided = urlParams.get('Provided');
+            if (Service != null) {
+                $("Activity[data-id='" + Service + "']").click();
+            } else if (Providing != null) {
+                $("Providing[data-id='" + Providing + "']").click();
+            } else if (Provided != null) {
+                $("Provided[data-id='" + Provided + "']").click();
+            }
+
+        });
+        function ModalOpen(element, id) {
+            if (element.classList.contains('ui-selectee')) {
+                return;
+            }
+            $(".choosen").removeClass("choosen");
+            $(element).addClass("choosen");
+            $.cookie('service-id', element.dataset.id);
+            ResetModal();
+            document.getElementById("InfoModalLabel").innerHTML = element.dataset.name;
+            $(id).modal();
+
+            $.get("/api/Service/" + $.cookie('service-id'), function (data) {
+                $("#FirstpartModalDesc").html(data['name']);
+                $("#SecondpartModalDesc").html(data['description']);
+            });
+        }
+
+
+
+        function ResetModal() {
+            /**Resets modal for new information*/
+
+            //reset active tabs
+
+            $('.active').removeClass('active');
+            $('.default-active').addClass('active');
+
+            $('#BodyInfo').tab('show');
+
+
+        }
+        function SetResourceDescription() {
+            LoadResources();
+        }
+        function SetNameAndDescription(name, desc) {
+            $("#FirstpartModalDesc").html(name);
+            $("#SecondpartModalDesc").html(desc);
+        }
+        //load data
+        function LoadChannels() {
+            ResetChannelData();
+            $.get("/api/Channel/Resource/" + $.cookie("resource-id"), function (data) {
+                data.forEach(function (element) {
+                    $("#keyactivities-channel-list").append(Craft_Channel(element['id'], element['name'], element['description']));
+                });
+            });
+
+        }
+        function LoadRelations() {
+            ResetRelationData();
+            ResetEmployeeData();
+            $.get("/api/Relation/Resource/" + $.cookie("resource-id"), function (data) {
+
+                $.cookie("relation-id", data['id']);
+                $("#FirstpartModalName-relation").html(data['name']);
+                $("#ThirdpartModalDesc-relation").html(data['description']);
+
+                $.get("/api/Employee/Relation/" + $.cookie("relation-id"), function (data) {
+                    data.forEach(function (element) {
+                        $("#client-list").append(Craft_Employee(element['id'], element['name'], element['position'], element['phone'], element['description'], element['support']));
+                    });
+                });
+
+            });
+
+        }
+
+       
+
+        function LoadResources() {
+            var ResourceID = $.cookie("resource-id")
+            ResetResourceData();
+            $.get("/api/ProvidesResource/Resources/" + $.cookie("service-id"), function (data) {
+                data.forEach(function (element) {
+                    $("#resource-list").append(Craft_Resource(element['id'], element['name'], element['description'], element['provideDescription'], element['type']));
+                });
+                $('resource[data-id="' + ResourceID + '"]').click();
+
+            });
+        }
+        function LoadEmployees() {
+            ResetEmployeeData();
+            $.get("/api/Employee/Service/" + $.cookie("service-id"), function (data) {
+                data.forEach(function (element) {
+                    $("#client-list").append(Craft_Employee(element['id'], element['name'], element['position'], element['phone'], element['description'], element['support']));
+                });
+            });
+
+
+        }
+        //show data
+
+        function ShowResourceData(element) {
+
+            $.cookie('resource-id', element.dataset.id);
+            $("#FirstpartModalDesc-Resource").html(element.dataset.name);
+            $("#SecondpartModalDesc-Resource").html(element.dataset.desc);
+            $("#ThirdpartModalDesc-Resource").html(element.dataset.type);
+            $("#FourthpartModalDesc-Resource").html(element.dataset.pdesc);
+
+            $(".resource-link").attr('href',(element.dataset.type == "event")?"/KEYACTIVITIES?Activity=":"/KEYRESOURCES?Resource=" + element.dataset.id);
+        }
+        function ShowEmployeeData(element) {
+
+            $.cookie('employee-id', element.dataset.id);
+            $("#activity-customerrelation-name-field").html(element.dataset.name);
+            $("#activity-customerrelation-position-field").html(element.dataset.position);
+            $("#activity-customerrelation-number-field").html(element.dataset.phone);
+            $("#activity-customerrelation-expextence-field").html(element.dataset.description);
+            $("#activity-customerrelation-support-field").html(element.dataset.support);
+            $("#activity-customerrelation-support-field").css('width', parseInt(element.dataset.support) * 20 + '%');
+
+            $(".human-link").attr('href',"/COSTUMERRELATIONSHIPS?Employee=" + element.dataset.id);
+        }
+        //reset data
+        function ResetEmployeeData() {
+            $("#client-list").html("");
+            $("#activity-customerrelation-name-field").html("...");
+            $("#activity-customerrelation-position-field").html("...");
+            $("#activity-customerrelation-number-field").html("...");
+            $("#activity-customerrelation-expextence-field").html("...");
+            $("#activity-customerrelation-support-field").html("");
+            $("#activity-customerrelation-support-field").css('width', '0%');
+
+            $(".human-link").removeAttr('href');
+        }
+
+        function ResetResourceData() {
+
+            $("#resource-list").html("");
+            $("#FirstpartModalDesc-Resource").html("...");
+            $("#SecondpartModalDesc-Resource").html("...");
+            $("#ThirdpartModalDesc-Resource").html("...");
+            $("#FourthpartModalDesc-Resource").html("...");
+
+            $(".resource-link").removeAttr('href');
+        }
+        //add to
+
+        function AddResourceToService(id, desc) {
+            $.post("/api/ProvidesResource/Add/" + $.cookie("service-id") + "/" + id + "/" + desc, function (element) {
+                $("#resource-list").append(Craft_Resource(element['id'], element['name'], element['description'], element['provideDescription'], element['type']));
+            });
+        }
+        //remove
+
+
+
+        function RemoveResourceFromService() {
+            $.ajax({
+                url: 'api/ProvidesResource/Remove/' + $.cookie('service-id') + '/' + $.cookie('resource-id'),
+                type: 'DELETE',
+                success: function (result) {
+                    LoadResources();
+                }
+            });
+        }
+
+
+        //craft elements
+        function Craft_Channel(id, name, description) {
+            return '<Channel class="list-group-item list-group-item-action element" data-id="'
+                + id + '" data-name="'
+                + name + '" data-desc="'
+                + description + '" data-toggle="list" role="tab" aria-controls="home" onclick="ShowChannelData(this);">' + name + '</Channel>';
+        }
+
+
+        function Craft_Employee(id, name, position, phone, description, support) {
+            return '<client class="list-group-item list-group-item-action element" data-id="' + id + '" data-name="' + name + '" data-position="' + position + '" data-phone="' + phone + '" data-description="' + description + '" data-support="' + support + '"  data-toggle="list" role="tab" onclick="ShowEmployeeData(this);" style="font-size: larger;">' + name + '</client>';
+        }
+        function Craft_Resource(id, name, description, provideDescription, type) {
+            return '<resource class="list-group-item list-group-item-action element" data-id="'
+                + id + '" data-name="'
+                + name + '" data-desc="'
+                + description + '" data-pdesc="'
+                + provideDescription + '" data-type="'
+                + type + '" data-toggle="list" role="tab" aria-controls="home" onclick="ShowResourceData(this)">' + name + '</resource>';
+        }
+
+        //util
+
+        function Choose() {
+            var select = $("Dataset");
+
+            if ($(".ui-selectee").length > 0) {
+
+                select.selectable("destroy");
+                $("#EraseButton").prop("disabled", true);
+                $("#SelectButton").html('<span class="glyphicon glyphicon-unchecked"></span>');
+                return;
+            }
+
+
+            select.selectable().on("selectableselected", function (event, ui) {
+
+                if ($(".ui-selected").length > 0) {
+                    $("#EraseButton").prop("disabled", false);
+                }
+
+            });
+
+            select.on("selectableunselected", function (event, ui) {
+
+                if ($(".ui-selected").length == 0) {
+                    $("#EraseButton").prop("disabled", true);
+                    select.selectable("destroy");
+                    $("#EraseButton").prop("disabled", true);
+                    $("#SelectButton").html('<span class="glyphicon glyphicon-unchecked"></span>');
+                }
+            });
+
+            $("#SelectButton").html('<span class="glyphicon glyphicon-check"></span>');
+
+
+        }
+
+        function Erease() {
+            var length = $(".ui-selected").length;
+            $(".ui-selected").each(function (i, e) {
+
+                if ($(e).is("Service")) {
+
+                    $.ajax({
+                        url: 'api/Service/' + e.dataset.id + '/',
+                        type: 'DELETE',
+                        success: function (result) {
+                            $(e).remove();
+                            $("Providing[data-id='" + e.dataset.id + "']").remove();
+                            $("Provided[data-id='" + e.dataset.id + "']").remove();
+                        }
+                    });
+
+
+                } else
+                    if ($(e).is("Providing")) {
+                        $.ajax({
+                            url: 'api/Service/Providing/' + e.dataset.id + '/',
+                            type: 'DELETE',
+                            success: function (result) {
+                                $(e).remove();
+                            }
+                        });
+
+                    } else
+                        if ($(e).is("Provided")) {
+                            $.ajax({
+                                url: 'api/Service/Provided/' + e.dataset.id + '/',
+                                type: 'DELETE',
+                                success: function (result) {
+                                    $(e).remove();
+                                }
+                            });
+
+                        }
+
+
+            });
+
+
+
+
+        }
+    </script>
+}
+

@@ -5,9 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using BusinessModel_Canvas.Data;
+using BusinessModel_Canvas.Models;
 
 namespace BusinessModel_Canvas
 {
@@ -15,7 +18,7 @@ namespace BusinessModel_Canvas
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            Configuration = configuration;    
         }
 
         public IConfiguration Configuration { get; }
@@ -24,6 +27,16 @@ namespace BusinessModel_Canvas
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+            services.AddMvc();
+            services.AddEntityFrameworkNpgsql().AddDbContext<Canvas_Context>(
+                options => options.UseNpgsql(
+                    Configuration.GetConnectionString("CanvasApiConnection")
+                ));
+
+            services.AddSingleton<Firm>();
+
+            services.AddSession(s => s.Cookie.Name="session-id");
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,15 +55,28 @@ namespace BusinessModel_Canvas
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+ 
             app.UseRouting();
 
-            app.UseAuthorization();
-
+           app.UseAuthorization();
+         
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapRazorPages();
+                    endpoints.MapRazorPages();
+
+                    endpoints.MapControllerRoute(
+                    name: "api",
+                    pattern: "{controller}/{id?}"
+                    );
+
+                    endpoints.MapControllerRoute(
+                    name: "api",
+                    pattern: "{controller}/{action}"
+                    );
             });
+
+
+
         }
     }
 }

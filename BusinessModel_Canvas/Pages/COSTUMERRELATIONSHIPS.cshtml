@@ -1,0 +1,1008 @@
+﻿@page
+@model BusinessModel_Canvas.Pages.COSTUMERRELATIONSHIPSModel
+@{
+    ViewData["Title"] = "COSTUMERRELATIONSHIPS";
+}
+
+<!--MODALS-->
+<div class="modal" id="FirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog" role="document">
+
+        <div id="ModalPartner" class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="InfoModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <ul id="InfoModalTabs" class="nav nav-tabs">
+                <li id="MainTabInfo" class="nav-item">
+                    <a class="nav-link btn-light default-active" id="home-tab-Info" data-toggle="tab" onclick="" href="#BodyInfo" role="tab" aria-controls="#BodyInfo" aria-selected="false">Info</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn-light" data-toggle="tab" onclick="LoadEmployees()" href="#BodyEmployees" role="tab" aria-controls="#BodyEmployees" aria-selected="false">Employees</a>
+                </li>
+            </ul>
+            <div class="modal-body tab-content">
+                <div id="BodyInfo" class="tab-pane tabcontent default-active" role="tabpanel" aria-labelledby="info-tab" style="height:100%">
+                    <div class="edit-bar">
+                        <button class="btn btn-info" onclick="window.open('/EditFirm?' + 'Firm=' + $.cookie('firm-id'), 'Edit Firm', 'toolbar=no,resizable=no,menubar=no')">Edit Firm</button>
+                        <button class="btn btn-danger" onclick="$('.choosen').addClass('ui-selected'); Erease();$('#InfoModal').modal('hide');">Delete Firm</button>
+                    </div>
+                    <div id="general-info" class="col" style="height:100%">
+
+
+                        <h5 id="FirstpartModalTitle" class="row">Name:</h5>
+
+                        <p id="FirstpartModalDesc" class="row info-text"> ...</p>
+
+
+                        <h5 id="SecondpartModalTitle" class="row">Description:</h5>
+
+                        <p id="SecondpartModalDesc" class="row scroll-break info-text" style="height: 35%;max-height: 300px;"> ...</p>
+
+
+
+                        <h5 id="ThirdpartModalTitle" class="row">Relationship Description:</h5>
+
+                        <p id="ThirdpartModalDesc" class="row scroll-break info-text" style="height: 30%;max-height: 300px;"> ...</p>
+
+
+                        <h5 id="FourthpartModalTitle" class="row">Order:</h5>
+
+                        <p id="FourthpartModalDesc" class="row info-text">...</p>
+
+
+                        <h5 id="FifthpartModalTitle" class="row hide">Partnering Reason:</h5>
+
+                        <p id="FifthpartModalDesc" class="row scroll-break hide info-text" style="height: 15%;max-height: 200px;">...</p>
+
+                    </div>
+
+                </div>
+                <div id="BodyEmployees" class="tab-pane tabcontent" role="tabpanel" aria-labelledby="employee-tab" style="height:100%">
+                    <div class="row" style="height:100%;width:100%">
+
+                        <div class="col" style="height:100%;width:100%">
+                            <div class="row" style="height:100%;width:100%">
+                                <div class="col">
+                                    <input oninput="Search(this,'client')" id="ClientSearchBar" type="search" class="form-control ds-input mb-3" placeholder="Search" style="width:100%">
+                                    <div class="list-group" id="client-list" role="tablist">
+
+
+                                    </div>
+                                </div>
+                                <div class="col" style="padding-right: 0px;">
+
+                                    <div class="input-group mb-3">
+                                        <select class="custom-select" id="client-select">
+                                            <option selected>Add Employee</option>
+
+                                            @foreach (var employee in Model.GetAllEmployees())
+                                            {
+                                                <option value="@employee.Id">@employee.Name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <button type="button" class="btn btn-success" onclick="AddEmployeeToFirm($('#client-select').val())">Add</button>
+
+                                    <button type="button" class="btn btn-secondary">Create</button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col" style="height:100%;width:100%;border-left:groove">
+                            <div id="ClientInfo" class="tab-pane tabcontent active" role="tabpanel" aria-labelledby="info-tab" style="height:100%">
+                                <div class="edit-bar">
+                                    <button class="btn btn-danger" onclick="RemoveEmployeeFromFirm()">Remove Employee From Firm</button>
+                                </div>
+                                <div class="col" style="height:100%">
+
+                                    <h5 id="customerrelation-name" class="row">Name:</h5>
+
+                                    <p id="customerrelation-name-field" style="margin-top:0px;" class="row info-text"> ...</p>
+
+
+                                    <h5 id="customerrelation-position" class="row">Position:</h5>
+
+                                    <p id="customerrelation-position-field" style="margin-top:0px;overflow-wrap:break-word;" class="row info-text">...</p>
+
+
+                                    <h5 id="customerrelation-number" class="row">Number:</h5>
+
+                                    <p id="customerrelation-number-field" style="margin-top:0px;overflow-wrap:break-word;" class="row info-text">...</p>
+
+
+                                    <h5 id="customerrelation-expextence" class="row">Expectence Description:</h5>
+
+                                    <p id="customerrelation-expextence-field" style="margin-top:0px;height:40%;max-height:300px;" class="row scroll-break info-text"> ...</p>
+
+
+
+                                    <h5 id="customerrelation-support" class="row">Support Level:</h5>
+
+                                    <div class="progress">
+                                        <div id="customerrelation-support-field" class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+
+
+
+                                    <a class="btn btn-turkcell-outline human-link" aria-label="Left Align" style="width:100%;margin-top: 10vh;">
+                                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                                        <p>Human Relation</p>
+                                    </a>
+
+
+
+
+
+
+
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <!--  <button type="button" class="btn btn-info">Copy</button>-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="RelationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog" role="document">
+
+        <div id="ModalPartner" class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="InfoModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <ul id="InfoModalTabs" class="nav nav-tabs">
+
+                <li class="nav-item">
+                    <a class="nav-link btn-light default-active" data-toggle="tab" onclick="" href="#BodyCustomerRelation" role="tab" aria-controls="#BodyCustomerRelation" aria-selected="false">Info</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn-light" data-toggle="tab" onclick="LoadInOut()" href="#BodyIncomeOutcome" role="tab" aria-controls="#BodyIncomeOutcome" aria-selected="false">Income/Outcome</a>
+                </li>
+
+            </ul>
+            <div class="modal-body tab-content">
+                <!--Tab content ============================-->
+                <div id="BodyCustomerRelation" class="tab-pane tabcontent default-active" role="tabpanel" aria-labelledby="employee-tab" style="height:100%">
+                    <div class="row" style="height:100%;width:100%">
+                        <div class="col" style="">
+                            <div id="ClientInfo" class="tab-pane tabcontent default-active active" role="tabpanel" aria-labelledby="info-tab" style="height:100%">
+                                <div class="edit-bar">
+                                    <button class="btn btn-info" onclick="window.open('/EditRelation?' + 'Relation=' + $.cookie('relation-id'), 'Edit Relation', 'toolbar=no,resizable=no,menubar=no')">Edit Relation</button>
+                                    <button class="btn btn-danger" onclick="$('.choosen').addClass('ui-selected'); Erease();$('#RelationModal').modal('hide');">Remove Relation</button>
+                                </div>
+                                <div class="col" style="height:100%">
+
+
+                                    <h5 class="row">Name:</h5>
+
+                                    <p id="FirstpartModalName-relation" class="row info-text "> ...</p>
+
+                                    <h5 class="row">Description:</h5>
+
+                                    <p id="SecondpartModalDesc-relation" class="row scroll-break info-text" style="height:60%;max-height:500px;">...</p>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col" style="height:100%;width:100%;border-left:groove">
+                            <div class="row" style="height:100%;width:100%">
+                                <div class="col" style="height:100%;">
+                                    <input oninput="Search(this, 'client');" id="ClientSearchBar" type="search" class="form-control ds-input mb-3" placeholder="Search" style="width:100%">
+                                    <div class="list-group" id="client-list-relation" role="tablist" style="height: 85%;">
+
+                                    </div>
+                                </div>
+                                <div class="col" style="padding-right: 0px;height:100%;">
+                                    <div class="row" style="padding-bottom:5px;">
+                                        <div class="input-group mb-3">
+                                            <select class="custom-select" id="client-select-relation">
+                                                <option selected>Choose...</option>
+                                                @foreach (var person in Model.GetAllEmployees())
+                                                {
+                                                    <option value="@person.Id">@person.Name</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="row" style="margin-left:0px;margin-right:0px;">
+                                            <button type="button" class="btn btn-success col" onclick="AddEmployeeToRelation($('#client-select-relation').val())">Add</button>
+                                            <button type="button" class="btn btn-danger col" onclick="RemoveEmployeeFromRelation()">Remove</button>
+                                            <button type="button" class="btn btn-secondary col">Create</button>
+                                        </div>
+                                    </div>
+
+                                    <h5 id="customerrelation-name" class="row">Name:</h5>
+
+                                    <p id="customerrelation-name-field-relation" style="margin-top:0px;" class="row info-text "> ...</p>
+
+
+                                    <h5 id="customerrelation-position" class="row">Position:</h5>
+
+                                    <p id="customerrelation-position-field-relation" style="margin-top:0px;overflow-wrap:break-word;" class="row info-text">...</p>
+
+
+                                    <h5 id="customerrelation-number" class="row">Number:</h5>
+
+                                    <p id="customerrelation-number-field-relation" style="margin-top:0px;overflow-wrap:break-word;" class="row info-text">...</p>
+
+
+                                    <h5 id="customerrelation-expextence" class="row">Expectence Description:</h5>
+
+                                    <p id="customerrelation-expextence-field-relation" style="margin-top:0px;height:40%;max-height:300px;" class="row scroll-break info-text"> ...</p>
+
+
+
+                                    <h5 id="customerrelation-support" class="row">Support Level:</h5>
+
+                                    <div class="progress">
+                                        <div id="customerrelation-support-field-relation" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+
+
+
+                                    <a class="btn btn-turkcell-outline human-link" aria-label="Left Align" style="width:100%">
+                                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                                        <p>Human Relation</p>
+                                    </a>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="BodyIncomeOutcome" class="tab-pane tabcontent" role="tabpanel" aria-labelledby="employee-tab" style="height:100%">
+                    <div class="row" style="height:100%;width:100%">
+                        <div class="col" style="height:100%;width:100%;">
+                            <div id="BodyIncomeOutcome-outcome" class="tab-pane tabcontent default-active active" role="tabpanel" aria-labelledby="info-tab" style="height:100%">
+                                <div class="col" style="height:100%">
+
+
+                                    <h5 id="FirstpartModalTitle-BodyIncomeOutcome-outcome" class="row">Name:</h5>
+                                    <p class="row info-text" id="FirstpartModalDesc-BodyIncomeOutcome-outcome">
+                                        ...
+                                    </p>
+
+
+                                    <h5 class="row" id="SecondpartModalTitle-BodyIncomeOutcome-outcome">Description:</h5>
+
+                                    <p class="row scroll-break info-text" style="height:40%;max-height:400px;" id="SecondpartModalDesc-BodyIncomeOutcome-outcome">
+                                        ...
+                                    </p>
+
+
+                                    <h5 class="row" id="ThirdpartModalTitle-BodyIncomeOutcome-outcome">Guessed Amount:</h5>
+
+                                    <p class="row info-text" id="ThirdpartModalDesc-BodyIncomeOutcome-outcome">...</p>
+
+
+                                    <h5 class="row" id="FourthpartModalTitle-BodyIncomeOutcome-outcome">Real Amount:</h5>
+
+                                    <p class="row info-text" id="FourthpartModalDesc-BodyIncomeOutcome-outcome">...</p>
+
+
+                                    <div class="row" style="height:10%"></div>
+
+
+
+
+
+
+                                    <div class="row" style="width:100%;margin-top:10%">
+
+                                        <div class="col">
+
+                                            <a class="btn btn-turkcell-outline col outcome-link" aria-label="Left Align" style="height:100%;">
+                                                <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+                                                <p>COST STRUCTURE</p>
+                                            </a>
+
+                                        </div>
+                                    </div>
+
+
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col" style="height:100%;width:100%;border-left:groove">
+                            <div id="BodyIncomeOutcome-income" class="tab-pane tabcontent default-active active" role="tabpanel" aria-labelledby="info-tab" style="height:100%">
+
+                                <div class="col" style="height:100%">
+
+
+                                    <h5 id="FirstpartModalTitle-BodyIncomeOutcome-income" class="row">Name:</h5>
+                                    <p class="row info-text" id="FirstpartModalDesc-BodyIncomeOutcome-income">
+                                        ...
+                                    </p>
+
+
+                                    <h5 class="row" id="SecondpartModalTitle-BodyIncomeOutcome-income">Description:</h5>
+
+                                    <p class="row scroll-break info-text" style="height:40%;max-height:400px;" id="SecondpartModalDesc-BodyIncomeOutcome-income">
+                                        ...
+                                    </p>
+
+
+                                    <h5 class="row" id="ThirdpartModalTitle-BodyIncomeOutcome-income">Guessed Amount:</h5>
+
+                                    <p class="row info-text" id="ThirdpartModalDesc-BodyIncomeOutcome-income">...</p>
+
+
+                                    <h5 class="row" id="FourthpartModalTitle-BodyIncomeOutcome-income">Real Amount:</h5>
+
+                                    <p class="row info-text" id="FourthpartModalDesc-BodyIncomeOutcome-income">...</p>
+
+
+                                    <div class="row" style="height:10%"></div>
+
+
+
+
+
+
+                                    <div class="row" style="width:100%;margin-top:10%">
+
+                                        <div class="col">
+
+                                            <a class="btn btn-turkcell-outline col income-link" aria-label="Left Align" style="height:100%;">
+                                                <span class="glyphicon glyphicon-usd" aria-hidden="true"></span>
+                                                <p>REVENUE STREAMS</p>
+                                            </a>
+
+                                        </div>
+                                    </div>
+
+
+
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <!--Tab content ============================-->
+            </div>
+
+            <!--Modal Footer-->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <!--  <button type="button" class="btn btn-info">Copy</button>-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="HumanModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content default-modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <ul class="nav nav-tabs">
+                <li id="MainTabInfo" class="nav-item">
+                    <a class="nav-link btn-light default-active active" id="home-tab-Info" data-toggle="tab" onclick="" href="#relation-human-info" role="tab" aria-controls="" aria-selected="false">Info</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn-light" data-toggle="tab" onclick="" href="#relation-human-1" role="tab" aria-controls="#relation-human-1" aria-selected="false">Communication</a>
+                </li>
+
+            </ul>
+            <div class="modal-body tab-content">
+                <!--Tab content ============================-->
+                <div id="relation-human-info" class="tab-pane tabcontent default-active" role="tabpanel" aria-labelledby="info-tab" style="height:100%">
+                    <div class="edit-bar">
+                        <button class="btn btn-info" onclick="window.open('/EditEmployee?' + 'Employee=' + $.cookie('employee-id'), 'Edit Employee', 'toolbar=no,resizable=no,menubar=no')">Edit Employee Info</button>
+                        <button class="btn btn-danger" onclick="$('.choosen').addClass('ui-selected'); Erease();$('#HumanModal').modal('hide');">Delete Employee</button>
+                    </div>
+                    <div id="general-info" class="col" style="height:100%">
+                        <h5 id="relation-human-name" class="row">Name:</h5>
+
+                        <p id="relation-human-name-field" style="margin-top:0px;" class="row info-text"> ...</p>
+
+
+                        <h5 id="relation-human-position" class="row">Position:</h5>
+
+                        <p id="relation-human-position-field" style="margin-top:0px;overflow-wrap:break-word;" class="row info-text">...</p>
+
+                        <h5 id="relation-human-expectence" class="row">Expectence Description:</h5>
+
+                        <p id="relation-human-expectence-field" style="margin-top:0px;height:20%;max-height:150px;" class="row scroll-break info-text"> ...</p>
+
+                        <h5 id="relation-human-support" class="row">Support Level:</h5>
+
+                        <div class="progress">
+                            <div id="relation-human-support-field" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+
+
+                        <h5 id="relation-human-graduated" class="row">School Graduated:</h5>
+
+                        <p id="relation-human-graduated-field" style="margin-top:0px;overflow-wrap:break-word;" class="row info-text">...</p>
+
+
+                        <h5 id="relation-human-interests" class="row">Interests:</h5>
+
+                        <p id="relation-human-interests-field" style="margin-top:0px;height:10%;max-height:75px;" class="row scroll-break info-text"> ...</p>
+
+
+                        <h5 id="relation-human-birthplace" class="row">Birth Place:</h5>
+
+                        <p id="relation-human-birthplace-field" style="margin-top:0px;overflow-wrap:break-word;" class="row info-text info-text">...</p>
+
+
+                        <h5 id="relation-human-birthdate" class="row">Birth Date:</h5>
+
+                        <p id="relation-human-birthdate-field" style="margin-top:0px;overflow-wrap:break-word;" class="row info-text info-text">...</p>
+
+                        <h5 id="relation-human-married" class="row">Is Married:</h5>
+
+                        <p id="relation-human-married-field" style="margin-top:0px;overflow-wrap:break-word;" class="row info-text info-text">...</p>
+
+                        <h5 id="relation-human-significant" class="row">Name Of Significant Other:</h5>
+
+                        <p id="relation-human-significant-field" style="margin-top:0px;overflow-wrap:break-word;" class="row info-text">...</p>
+
+                        <h5 id="relation-human-children" class="row">Name Of Children:</h5>
+
+                        <p id="relation-human-children-field" style="margin-top:0px;overflow-wrap:break-word;" class="row info-text">...</p>
+
+
+                    </div>
+
+                </div>
+                <div id="relation-human-1" class="tab-pane tabcontent" role="tabpanel" aria-labelledby="service-tab" style="height:100%">
+                    <div id="communication-info" class="col" style="height:100%">
+
+                        <h5 id="relation-human-cell-number" class="row">Cell Phone Number:</h5>
+
+                        <p id="relation-human-cell-number-field" style="margin-top:0px;overflow-wrap:break-word;" class="row info-text">...</p>
+
+                        <h5 id="relation-human-office-number" class="row">Office Phone Number:</h5>
+
+                        <p id="relation-human-office-number-field" style="margin-top:0px;overflow-wrap:break-word;" class="row info-text">...</p>
+
+                        <h5 id="relation-human-office-address" class="row">Office Address:</h5>
+
+                        <p id="relation-human-office-address-field" style="margin-top:0px;height:20%;max-height:200px;" class="row scroll-break info-text"> ...</p>
+
+                        <h5 id="relation-human-home-address" class="row">Home Address:</h5>
+
+                        <p id="relation-human-home-address-field" style="margin-top:0px;height:20%;max-height:200px;" class="row scroll-break info-text"> ...</p>
+
+
+                    </div>
+                </div>
+
+                <!--Tab content ============================-->
+            </div>
+
+            <!--Modal Footer-->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <!--  <button type="button" class="btn btn-info">Copy</button>-->
+            </div>
+        </div>
+    </div>
+</div>
+<!--MODALS=================================================================-->
+<div class="row container-fluid" style="min-width: 800px;">
+    <div class="col" style="max-width:100px;">
+        <div class="dropdown">
+            <button id="CreateButton" onclick="" class="row  btn btn-primary" style="height: 7%;width: 90%;margin-left: 10%;font-size:40px;" data-toggle="dropdown" data-placement="right" title="Ekle" aria-haspopup="true" aria-expanded="false">
+                <span class="glyphicon glyphicon-plus"></span>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="CreateButton">
+                <a class="dropdown-item btn-turkcell-outline element" onclick="window.open('/CreateFirm','Create Firm','toolbar=no,resizable=no,menubar=no')"><span class="glyphicon glyphicon-briefcase"></span>Firm</a>
+                <a class="dropdown-item btn-turkcell-outline element" onclick="window.open('/CreateRelation','Create Relation','toolbar=no,resizable=no')"><span class="glyphicon glyphicon-heart"></span>Relation</a>
+                <a class="dropdown-item btn-turkcell-outline element" onclick="window.open('/CreateEmployee','Create Employee','toolbar=no,resizable=no')"><span class="glyphicon glyphicon-user"></span>Employee</a>
+            </div>
+        </div>
+        <button id="SelectButton" onclick="Choose()" class="row  btn btn-secondary" style="height: 7%;width: 90%;margin-left: 10%;font-size:40px;" data-toggle="tooltip" data-placement="right" title="Seç">
+            <span class="glyphicon glyphicon-unchecked"></span>
+        </button>
+        <button id="EraseButton" onclick="Erease()" class="row  btn btn-danger" style="height: 7%;width: 90%;margin-left: 10%;font-size:40px;" data-toggle="tooltip" data-placement="right" title="Sil" disabled>
+            <span class="glyphicon glyphicon-erase"></span>
+        </button>
+    </div>
+
+    <div class="container-fluid col" id="ContentArea" style="width: 75%;margin-left:0px;max-width:1600px;">
+
+
+
+        <div class="container-fluid row" id="TitlesOfCanvas">
+            <div class="col">
+                <div class="row">
+                    <input oninput="Search(this, 'Firm');Search(this, 'Relation');Search(this, 'Employee');" id="SearchBar" type="search" class="form-control form-group-lg" placeholder="Search">
+                </div>
+                <div id="Titles" class="row">
+                    <div class="col">Firms</div>
+                    <div class="col">Relation Models</div>
+                    <div class="col">Human Relations</div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="container-fluid row" id="DataTableSection">
+
+            <Dataset class="col">
+
+                <Firm class="row box element" type="button" onclick="ModalOpen(this,'#FirmModal')" data-id="0f2e1299-0f25-48be-a9b1-1c971422d60d" data-name="Turkcell">Turkcell</Firm>
+                @foreach (var firm in Model.GetAllFirms())
+                {
+                    <Firm class="row box element" type="button" onclick="ModalOpen(this,'#FirmModal')" data-id="@firm.Item1" data-name="@firm.Item2">@firm.Item2</Firm>
+                }
+
+            </Dataset>
+            <Dataset class="col">
+                @foreach (var relation in Model.GetAllRelations())
+                {
+                    <Relation class="row box element" type="button" onclick="ModalOpen(this,'#RelationModal')" data-id="@relation.Id" data-name="@relation.Name">@relation.Name</Relation>
+                }
+            </Dataset>
+            <Dataset class="col">
+                @foreach (var person in Model.GetAllEmployees())
+                {
+                    <Employee class="row box element" type="button" onclick="ModalOpen(this,'#HumanModal')" data-id="@person.Id" data-name="@person.Name">@person.Name</Employee>
+                }
+            </Dataset>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            var urlParams = new URLSearchParams(window.location.search);
+            var Firm = urlParams.get('Firm');
+            var Relation = urlParams.get('Relation');
+            var Employee = urlParams.get('Employee');
+            if (Firm != null) {
+                $("Firm[data-id='" + Firm + "']").click();
+            } else if (Relation != null) {
+                $("Relation[data-id='" + Relation + "']").click();
+            } else if (Employee != null) {
+                $("Employee[data-id='" + Employee + "']").click();
+            }
+
+        });
+        function ModalOpen(element, id) {
+            if (element.classList.contains('ui-selectee')) {
+                return;
+            }
+            $(".choosen").removeClass("choosen");
+            $(element).addClass("choosen");
+
+            ResetModal();
+
+            switch (id) {
+                case "#FirmModal":
+                    ResetEmployeeInfoData();
+                    $.cookie("firm-id", element.dataset.id);
+                    LoadFirm();
+                    break
+                case "#RelationModal":
+                    ResetRelationData();
+                    $.cookie("relation-id", element.dataset.id);
+                    LoadRelation();
+                    break
+                case "#HumanModal":
+                    ResetEmployeeData();
+                    $.cookie("employee-id", element.dataset.id);
+                    LoadEmloyeeInfo();
+            }
+
+            $(".modal-title").html(element.dataset.name);
+            $(id).modal();
+
+
+
+        }
+
+
+
+        function ResetModal() {
+            /**Resets modal for new information*/
+              
+            //reset active tabs
+
+            $('.active').removeClass('active');
+            $('.default-active').addClass('active');
+
+
+
+
+        }
+        function SetFirmUpdate(name, order, description, relationshipDescription) {
+            $("#FirstpartModalDesc").html(name);
+            $("#SecondpartModalDesc").html(description);
+            $("#ThirdpartModalDesc").html(relationshipDescription);
+            $("#FourthpartModalDesc").html(order);
+
+            $("Firm[data-id='" + $('.choosen').data('id') + "']").html(name);
+        }
+        function SetRelationUpdate(name, description) {
+            $("#FirstpartModalName-relation").html(name);
+            $("#SecondpartModalDesc-relation").html(description);
+            $("Relation[data-id='" + $('.choosen').data('id') + "']").html(name);
+        }
+        function SetEmployeeUpdate(id, name) {
+            $("#HumanModal").modal('hide');
+            $("Employee[data-id='" + id + "']").html(name);
+            $("Employee[data-id='" + id + "']").click();
+        }
+        //load data
+
+        function LoadFirm() {
+
+
+            $.get("/api/Firms/" + $.cookie("firm-id"), function (data) {
+                $("#FirstpartModalDesc").html(data['name']);
+                $("#SecondpartModalDesc").html(data['description']);
+                $("#ThirdpartModalDesc").html(data['relationshipDescription']);
+                $("#FourthpartModalDesc").html(data['order']);
+
+            });
+        }
+
+
+        function LoadRelation() {
+
+
+            $.get("/api/Relation/" + $.cookie("relation-id"), function (data) {
+
+                $.cookie("relation-id", data['id']);
+                $("#FirstpartModalName-relation").html(data['name']);
+                $("#SecondpartModalDesc-relation").html(data['description']);
+
+                $.get("/api/Employee/Relation/" + $.cookie("relation-id"), function (data) {
+                    data.forEach(function (element) {
+                        $("#client-list-relation").append(Craft_Employee(element['id'], element['name'], element['position'], element['phone'], element['description'], element['support']));
+                    });
+                });
+                $(".relation-link").attr('href', "/COSTUMERRELATIONSHIPS?Relation=" + data['id']);
+            });
+
+        }
+        function LoadInOut() {
+            ResetInOutData();
+            $.get("/api/Income/Relation/" + $.cookie("relation-id"), function (data) {
+                $.cookie('income-id', data['id']);
+                $("#FirstpartModalDesc-BodyIncomeOutcome-income").html(data['name']);
+                $("#SecondpartModalDesc-BodyIncomeOutcome-income").html(data['description']);
+                $("#ThirdpartModalDesc-BodyIncomeOutcome-income").html(data['guessedAmount']).prepend('₺ ');
+                $("#FourthpartModalDesc-BodyIncomeOutcome-income").html(data['realAmount']).prepend('₺ ');
+
+                $(".income-link").attr('href',"/REVENUESTREAMS?Income=" + data['id']);
+            });
+            $.get("/api/Outcome/Relation/" + $.cookie("relation-id"), function (data) {
+                $.cookie('outcome-id', data['id']);
+                $("#FirstpartModalDesc-BodyIncomeOutcome-outcome").html(data['name']);
+                $("#SecondpartModalDesc-BodyIncomeOutcome-outcome").html(data['description']);
+                $("#ThirdpartModalDesc-BodyIncomeOutcome-outcome").html(data['guessedAmount']).prepend('₺ ');
+                $("#FourthpartModalDesc-BodyIncomeOutcome-outcome").html(data['realAmount']).prepend('₺ ');
+
+                $(".outcome-link").attr('href',"/COSTSTRUCTURE?Outcome=" + data['id']);
+            });
+
+        }
+        function LoadEmloyeeInfo() {
+            $.get("/api/Employee/info/" + $.cookie("employee-id"), function (data) {
+
+                $("#relation-human-name-field").html(data['name']);
+                $("#relation-human-position-field").html(data['position']);
+                $("#relation-human-expectence-field").html(data['description']);
+                $("#relation-human-support-field").html(data['support']);
+                if (data['support'] != null) $("#relation-human-support-field").css('width', parseInt(data['support']) * 20 + '%');
+
+                $("#relation-human-graduated-field").html(data['school']);
+                $("#relation-human-birthplace-field").html(data['birthPlace']);
+                $("#relation-human-married-field").html(data['isMarried'] ? "Married" : "Not Married");
+                $("#relation-human-significant-field").html(data['significant']);
+                if (data['children'] != null) {
+                    $("#relation-human-children-field").html("");
+                    $("#relation-human-children-field").append(" | ");
+                    data['children'].forEach(c => $("#relation-human-children-field").append(c + " | "));
+                }
+
+                $("#relation-human-interests-field").html(data['interests']);
+                if (data['birthDate'] != null) $("#relation-human-birthdate-field").html(data['birthDate'].slice(0, 10));
+
+
+                //comunication
+                $("#relation-human-cell-number-field").html(data['cellPhone']);
+                $("#relation-human-office-number-field").html(data['officePhone']);
+                $("#relation-human-office-address-field").html(data['officeAddress']);
+                $("#relation-human-home-address-field").html(data['homeAddress']);
+            });
+        }
+        function LoadEmployees() {
+            ResetEmployeeData();
+            $.get("/api/Employee/Firm/" + $.cookie("firm-id"), function (data) {
+                data.forEach(function (element) {
+                    $("#client-list").append(Craft_Employee(element['id'], element['name'], element['position'], element['phone'], element['description'], element['support']));
+                });
+            });
+        }
+        //show data
+
+
+        
+        function ShowEmployeeData(element) {
+
+            $.cookie('employee-id', element.dataset.id);
+            $("#customerrelation-name-field").html(element.dataset.name);
+            $("#customerrelation-position-field").html(element.dataset.position);
+            $("#customerrelation-number-field").html(element.dataset.phone);
+            $("#customerrelation-expextence-field").html(element.dataset.description);
+            $("#customerrelation-support-field").html(element.dataset.support);
+            $("#customerrelation-support-field").css('width', parseInt(element.dataset.support) * 20 + '%');
+
+
+            $("#customerrelation-name-field-relation").html(element.dataset.name);
+            $("#customerrelation-position-field-relation").html(element.dataset.position);
+            $("#customerrelation-number-field-relation").html(element.dataset.phone);
+            $("#customerrelation-expextence-field-relation").html(element.dataset.description);
+            $("#customerrelation-support-field-relation").html(element.dataset.support);
+            $("#customerrelation-support-field-relation").css('width', parseInt(element.dataset.support) * 20 + '%');
+
+            $(".human-link").attr('href',"/COSTUMERRELATIONSHIPS?Employee=" + element.dataset.id);
+        }
+        //reset data
+        function ResetFirmData() {
+            $("#FirstpartModalDesc").html("...");
+            $("#SecondpartModalDesc").html("...");
+            $("#ThirdpartModalDesc").html("...");
+            $("#FourthpartModalDesc").html("...");
+            $("#FifthpartModalDesc").html("...");
+        }
+        function ResetRelationData() {
+            $.removeCookie("relation-id");
+            $("#FirstpartModalName-relation").html("...");
+            $("#SecondpartModalDesc-relation").html("...");
+
+            $(".relation-link").removeAttr('href');
+        }
+        function ResetEmployeeInfoData() {
+            $.removeCookie("employee-id");
+            $("#relation-human-name-field").html("");
+            $("#relation-human-position-field").html("");
+            $("#relation-human-expectence-field").html("");
+            $("#relation-human-support-field").html("");
+            $("#relation-human-support-field").css('width', '0%');
+
+            $("#relation-human-graduated-field").html("...");
+            $("#relation-human-birthplace-field").html("...");
+            $("#relation-human-married-field").html("...");
+            $("#relation-human-significant-field").html("...");
+            $("#relation-human-children-field").html("...");
+            $("#relation-human-interests-field").html("...");
+            $("#relation-human-birthdate-field").html("...");
+
+
+            //comunication
+            $("#relation-human-cell-number-field").html("...");
+            $("#relation-human-office-number-field").html("...");
+            $("#relation-human-office-address-field").html("...");
+            $("#relation-human-home-address-field").html("...");
+
+
+        }
+        function ResetEmployeeData() {
+            $.removeCookie("employee-id");
+            $("#client-list").html("");
+            $("#client-list-relation").html("");
+            $("#customerrelation-name-field").html("...");
+            $("#customerrelation-position-field").html("...");
+            $("#customerrelation-number-field").html("...");
+            $("#customerrelation-expextence-field").html("...");
+            $("#customerrelation-support-field").html("");
+            $("#customerrelation-support-field").css('width', '0%');
+
+            $("#customerrelation-name-field-relation").html("...");
+            $("#customerrelation-position-field-relation").html("...");
+            $("#customerrelation-number-field-relation").html("...");
+            $("#customerrelation-expextence-field-relation").html("...");
+            $("#customerrelation-support-field-relation").html("");
+            $("#customerrelation-support-field-relation").css('width', '0%');
+
+            $(".human-link").removeAttr('href');
+        }
+        function ResetInOutData() {
+            $.removeCookie("outcome-id");
+            $.removeCookie("income-id");
+            $("#FirstpartModalDesc-BodyIncomeOutcome-outcome").html("...");
+            $("#SecondpartModalDesc-BodyIncomeOutcome-outcome").html("...");
+            $("#ThirdpartModalDesc-BodyIncomeOutcome-outcome").html("...");
+            $("#FourthpartModalDesc-BodyIncomeOutcome-outcome").html("...");
+            $("#FirstpartModalDesc-BodyIncomeOutcome-income").html("...");
+            $("#SecondpartModalDesc-BodyIncomeOutcome-income").html("...");
+            $("#ThirdpartModalDesc-BodyIncomeOutcome-income").html("...");
+            $("#FourthpartModalDesc-BodyIncomeOutcome-income").html("...");
+
+            $(".outcome-link").removeAttr('href');
+            $(".income-link").removeAttr('href');
+        }
+        //add to
+        function AddChanneloResource(id) {
+            $.post("/api/Channel/Add/" + $.cookie('resource-id') + "/" + id, function (element) {
+                $("#keyactivities-channel-list").append(Craft_Channel(element['id'], element['name'], element['description']));
+            });
+        }
+
+        function AddEmployeeToRelation(id) {
+            $.post("/api/Employee/Add/ToRelation/" + $.cookie('relation-id') + "/" + id, function (element) {
+                $("#client-list-relation").append(Craft_Employee(element['id'], element['name'], element['position'], element['phone'], element['description'], element['support']));
+            });
+        }
+        function AddEmployeeToFirm(id) {
+            $.post("/api/Employee/Add/ToFirm/" + $.cookie('firm-id') + "/" + id, function (element) {
+                $("#client-list").append(Craft_Employee(element['id'], element['name'], element['position'], element['phone'], element['description'], element['support']));
+            });
+        }
+
+        //remove
+
+
+
+        function RemoveEmployeeFromRelation() {
+            $.ajax({
+                url: 'api/Employee/Remove/FromRelation/' + $.cookie('relation-id') + '/' + $.cookie('employee-id'),
+                type: 'DELETE',
+                success: function (result) {
+                    $("#client-list-relation").html("");
+                    $.get("/api/Employee/Relation/" + $.cookie("relation-id"), function (data) {
+                        data.forEach(function (element) {
+                            $("#client-list-relation").append(Craft_Employee(element['id'], element['name'], element['position'], element['phone'], element['description'], element['support']));
+                        });
+                    });
+                }
+            });
+        }
+
+        function RemoveEmployeeFromFirm() {
+            $.ajax({
+                url: 'api/Employee/Remove/' + $.cookie('firm-id') + '/' + $.cookie('employee-id'),
+                type: 'DELETE',
+                success: function (result) {
+                    LoadEmployees();
+                }
+            });
+        }
+
+
+
+        //craft elements
+
+
+
+        function Craft_Employee(id, name, position, phone, description, support) {
+            return '<client class="list-group-item list-group-item-action element" data-id="' + id + '" data-name="' + name + '" data-position="' + position + '" data-phone="' + phone + '" data-description="' + description + '" data-support="' + support + '"  data-toggle="list" role="tab" onclick="ShowEmployeeData(this);" style="font-size: larger;">' + name + '</client>';
+        }
+
+
+        //util
+
+        function Choose() {
+            var select = $("Dataset");
+
+            if ($(".ui-selectee").length > 0) {
+
+                select.selectable("destroy");
+                $("#EraseButton").prop("disabled", true);
+                $("#SelectButton").html('<span class="glyphicon glyphicon-unchecked"></span>');
+                return;
+            }
+
+
+            select.selectable().on("selectableselected", function (event, ui) {
+
+                if ($(".ui-selected").length > 0) {
+                    $("#EraseButton").prop("disabled", false);
+                }
+
+            });
+
+            select.on("selectableunselected", function (event, ui) {
+
+                if ($(".ui-selected").length == 0) {
+                    $("#EraseButton").prop("disabled", true);
+                    select.selectable("destroy");
+                    $("#EraseButton").prop("disabled", true);
+                    $("#SelectButton").html('<span class="glyphicon glyphicon-unchecked"></span>');
+                }
+            });
+
+            $("#SelectButton").html('<span class="glyphicon glyphicon-check"></span>');
+
+
+        }
+
+        function Erease() {
+
+
+
+            $(".ui-selected").each(function (i, e) {
+
+                if ($(e).is("Firm")) {
+
+                    $.ajax({
+                        url: 'api/Firms/' + e.dataset.id + '/',
+                        type: 'DELETE',
+                        success: function (result) {
+                            $(e).remove();
+                        }
+                    });
+
+
+                } else
+                    if ($(e).is("Relation")) {
+                        $.ajax({
+                            url: 'api/Relation/' + e.dataset.id + '/',
+                            type: 'DELETE',
+                            success: function (result) {
+                                $(e).remove();
+                            }
+                        });
+
+                    } else
+                        if ($(e).is("Employee")) {
+                            $.ajax({
+                                url: 'api/Employee/' + e.dataset.id + '/',
+                                type: 'DELETE',
+                                success: function (result) {
+                                    $(e).remove();
+                                }
+                            });
+                        }
+
+
+            });
+
+
+
+
+
+        }
+    </script>
+}
+
